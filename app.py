@@ -95,7 +95,8 @@ def index():
         top_tracks  = api_get('https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=medium_term')
         recent      = api_get('https://api.spotify.com/v1/me/player/recently-played?limit=50')
     except Exception as e:
-        return f"API Error: {e}", 500
+        import traceback
+        return f"<pre>API Error: {e}\n\n{traceback.format_exc()}</pre>", 500
 
     # ── Genre distribution ──────────────────────────────────────
     genre_count = {}
