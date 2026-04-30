@@ -16,16 +16,30 @@ app.config['JSON_AS_ASCII'] = False
 # ── Token helpers ────────────────────────────────────────────────
 
 def read_tokens():
-    """Read raw tokens from .env (bypass env var masking)."""
-    tokens = {}
-    with open('/opt/data/.env', 'rb') as f:
-        raw = f.read()
-    tokens['client_id']     = re.search(b'SPOTIFY_CLIENT_ID=([a-zA-Z0-9]+)',     raw).group(1).decode()
-    tokens['client_secret'] = re.search(b'SPOTIFY_CLIENT_SECRET=([a-zA-Z0-9]+)', raw).group(1).decode()
-    tokens['refresh_token'] = re.search(b'SPOTIFY_REFRESH_TOKEN=([A-Za-z0-9_-]+)', raw).group(1).decode()
-    access = re.search(b'SPOTIFY_ACCESS_TOKEN=([A-Za-z0-9_-]+)', raw)
-    tokens['access_token'] = access.group(1).decode() if access else None
-    return tokens
+    """Read tokens from environment variables (Render) or local .env (dev)."""
+    # Try Render environment variables first
+    client_id     = os.environ.get('SPOTIFY_CLIENT_ID')
+    client_secret = os.environ.get('SPOTIFY_CLIENT_SECRET')
+    refresh_token = os.environ.get('SPOTIFY_REFRESH_TOKEN')
+    access_token  = os.environ.get('SPOTIFY_ACCESS_TOKEN')
+
+    # Fall back to local .env (for local dev only)
+    if not client_id:
+        try:
+            with open('/opt/data/.env', 'rb') as f:
+                raw = f.read()
+            client_id     = re.search(b'SPOTIFY_CLIENT_ID=([a-zA-Z0-9]+)',     raw).group(1).decode()
+            client_secret = re.search(b'SPOTIFY_CLIENT_SECRET=([a-zA-Z0-9]+)', raw).group(1).decode()
+            refresh_token = re.search(b'SPOTIFY_REFRESH_TOKEN=([A-Za-z0-9_-]+)', raw).group(1).decode()
+            access        = re.search(b'SPOTIFY_ACCESS_TOKEN=([A-Za-z0-9_-]+)', raw)
+            access_token  = access.group(1).decode() if access else None
+        except Exception:
+            pass
+
+    if not client_id:
+        raise Exception("Spotify credentials not found in environment or .env")
+    return {'client_id': client_id, 'client_secret': client_secret,
+            'refresh_token': refresh_token, 'access_token': access_token}
 
 def refresh_access_token(client_id, client_secret, refresh_token):
     data = urllib.parse.urlencode({

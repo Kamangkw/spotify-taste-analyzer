@@ -1,0 +1,14 @@
+services:
+  - name: spotify-taste-analyzer
+    repo: https://github.com/Kamangkw/spotify-taste-analyzer
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: SPOTIFY_CLIENT_ID
+        sync: false
+      - key: SPOTIFY_CLIENT_SECRET
+        sync: false
+      - key: SPOTIFY_REFRESH_TOKEN
+        sync: false
