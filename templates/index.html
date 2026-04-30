@@ -8,87 +8,145 @@
   :root {
     --bg: #121212;
     --card: #1e1e1e;
+    --card2: #252525;
     --accent: #1DB954;
     --accent2: #509bf5;
+    --accent3: #e91e63;
     --text: #e0e0e0;
     --muted: #888;
     --border: #333;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, sans-serif; padding: 16px; max-width: 800px; margin: 0 auto; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, sans-serif; padding: 12px; max-width: 840px; margin: 0 auto; }
 
-  h1 { font-size: 1.6rem; margin-bottom: 4px; color: var(--accent); }
-  h2 { font-size: 1.1rem; color: var(--text); margin: 24px 0 12px; display: flex; align-items: center; gap: 8px; }
-  h2 span { color: var(--accent); }
+  /* ── Header ── */
+  header { text-align: center; padding: 16px 0 8px; }
+  h1 { font-size: 1.8rem; color: var(--accent); margin-bottom: 4px; }
+  .subtitle { color: var(--muted); font-size: 0.78rem; margin-bottom: 12px; }
 
-  .section { background: var(--card); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-  .section-title { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 12px; }
+  /* ── Time Range Selector ── */
+  .range-selector { display: flex; justify-content: center; gap: 6px; margin-bottom: 20px; }
+  .range-btn {
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .range-btn:hover { border-color: var(--accent); color: var(--text); }
+  .range-btn.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600; }
 
-  /* Top Artists Grid */
-  .artists-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
-  .artist-card { background: #2a2a2a; border-radius: 8px; padding: 12px; text-align: center; }
-  .artist-card img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 8px; background: #333; }
-  .artist-card .name { font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; }
-  .artist-card .genres { font-size: 0.7rem; color: var(--muted); line-height: 1.3; }
+  /* ── Stats Row ── */
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
+  .stat-box { background: var(--card); border-radius: 10px; padding: 12px 8px; text-align: center; }
+  .stat-val { font-size: 1.4rem; font-weight: bold; color: var(--accent); }
+  .stat-val.secondary { color: var(--accent2); }
+  .stat-label { font-size: 0.65rem; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-  /* Top Tracks List */
-  .tracks-list { display: flex; flex-direction: column; gap: 8px; }
-  .track-item { display: flex; align-items: center; gap: 12px; padding: 8px; background: #2a2a2a; border-radius: 8px; }
-  .track-item img { width: 44px; height: 44px; border-radius: 4px; background: #333; flex-shrink: 0; }
-  .track-info { flex: 1; min-width: 0; }
-  .track-info .name { font-size: 0.9rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .track-info .artist { font-size: 0.75rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .track-info .album { font-size: 0.7rem; color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .track-rank { font-size: 1.2rem; color: var(--accent); font-weight: bold; width: 28px; text-align: center; flex-shrink: 0; }
+  /* ── Section ── */
+  h2 { font-size: 1rem; color: var(--text); margin: 24px 0 10px; display: flex; align-items: center; gap: 8px; }
+  h2 .icon { font-size: 1.1rem; }
+  .section { background: var(--card); border-radius: 12px; padding: 14px; margin-bottom: 14px; }
 
-  /* Genre Chart */
-  .genre-chart { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-  .genre-tag { background: #2a2a2a; border-radius: 20px; padding: 5px 10px; font-size: 0.75rem; display: flex; align-items: center; gap: 6px; }
-  .genre-tag .bar { height: 6px; background: var(--accent); border-radius: 3px; }
+  /* ── Features Grid ── */
+  .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .feature-card { background: var(--card2); border-radius: 8px; padding: 10px 6px; text-align: center; }
+  .feature-value { font-size: 1.4rem; font-weight: bold; color: var(--accent); }
+  .feature-label { font-size: 0.65rem; color: var(--muted); margin-top: 2px; }
+  .feature-bar-bg { height: 4px; background: #333; border-radius: 2px; margin-top: 6px; overflow: hidden; }
+  .feature-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; }
+
+  /* ── Decade Bar ── */
+  .decade-bar-chart { display: flex; flex-direction: column; gap: 6px; }
+  .decade-row { display: flex; align-items: center; gap: 8px; }
+  .decade-label { font-size: 0.75rem; width: 90px; color: var(--muted); flex-shrink: 0; }
+  .decade-bar-bg { flex: 1; height: 16px; background: var(--card2); border-radius: 4px; overflow: hidden; }
+  .decade-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 4px; transition: width 0.5s; }
+  .decade-count { font-size: 0.75rem; width: 24px; text-align: right; color: var(--accent); flex-shrink: 0; }
+
+  /* ── Listening Time ── */
+  .time-chart { display: flex; flex-direction: column; gap: 6px; }
+  .time-row { display: flex; align-items: center; gap: 8px; }
+  .time-label { font-size: 0.75rem; width: 120px; color: var(--muted); flex-shrink: 0; }
+  .time-bar-bg { flex: 1; height: 14px; background: var(--card2); border-radius: 4px; overflow: hidden; }
+  .time-bar-fill { height: 100%; background: var(--accent3); border-radius: 4px; }
+  .time-count { font-size: 0.75rem; width: 24px; text-align: right; color: var(--accent3); flex-shrink: 0; }
+
+  /* ── Genre Tags ── */
+  .genre-chart { display: flex; flex-wrap: wrap; gap: 6px; }
+  .genre-tag { background: var(--card2); border-radius: 20px; padding: 5px 10px; font-size: 0.72rem; display: flex; align-items: center; gap: 5px; }
+  .genre-tag .bar { height: 5px; background: var(--accent); border-radius: 3px; min-width: 4px; }
   .genre-tag .name { color: var(--text); }
   .genre-tag .count { color: var(--muted); }
 
-  /* Decade Bar */
-  .decade-bar-chart { display: flex; flex-direction: column; gap: 8px; }
-  .decade-row { display: flex; align-items: center; gap: 8px; }
-  .decade-label { font-size: 0.8rem; width: 60px; color: var(--muted); flex-shrink: 0; }
-  .decade-bar-bg { flex: 1; height: 20px; background: #2a2a2a; border-radius: 4px; overflow: hidden; }
-  .decade-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 4px; transition: width 0.5s; }
-  .decade-count { font-size: 0.8rem; width: 28px; text-align: right; color: var(--accent); flex-shrink: 0; }
+  /* ── Artists Grid ── */
+  .artists-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+  .artist-card { background: var(--card2); border-radius: 8px; padding: 10px; text-align: center; }
+  .artist-card img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; margin-bottom: 6px; background: #333; }
+  .artist-card .name { font-size: 0.8rem; font-weight: 600; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .artist-card .genres { font-size: 0.65rem; color: var(--muted); line-height: 1.3; }
 
-  /* Audio Features */
-  .features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .feature-card { background: #2a2a2a; border-radius: 8px; padding: 12px; text-align: center; }
-  .feature-value { font-size: 1.8rem; font-weight: bold; color: var(--accent); }
-  .feature-label { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
-  .feature-bar-bg { height: 6px; background: #444; border-radius: 3px; margin-top: 8px; overflow: hidden; }
-  .feature-bar-fill { height: 100%; background: var(--accent); border-radius: 3px; }
+  /* ── Tracks List ── */
+  .tracks-list { display: flex; flex-direction: column; gap: 6px; }
+  .track-item { display: flex; align-items: center; gap: 10px; padding: 7px; background: var(--card2); border-radius: 8px; }
+  .track-item img { width: 40px; height: 40px; border-radius: 4px; background: #333; flex-shrink: 0; }
+  .track-info { flex: 1; min-width: 0; }
+  .track-info .name { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .track-info .artist { font-size: 0.7rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .track-info .album { font-size: 0.65rem; color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .track-rank { font-size: 1rem; color: var(--accent); font-weight: bold; width: 24px; text-align: center; flex-shrink: 0; }
 
-  /* Recent */
-  .recent-list { display: flex; flex-direction: column; gap: 6px; }
-  .recent-item { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; }
-  .recent-item img { width: 36px; height: 36px; border-radius: 4px; background: #333; flex-shrink: 0; }
+  /* ── Discovery Radar ── */
+  .discovery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .discovery-card { background: var(--card2); border-radius: 8px; padding: 10px; }
+  .discovery-card img { width: 100%; aspect-ratio: 1; border-radius: 6px; background: #333; object-fit: cover; margin-bottom: 6px; }
+  .discovery-card .name { font-size: 0.8rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .discovery-card .artist { font-size: 0.7rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .discovery-card .album { font-size: 0.65rem; color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .discovery-card .badge { display: inline-block; background: var(--accent); color: #000; font-size: 0.6rem; padding: 2px 6px; border-radius: 10px; margin-top: 4px; font-weight: 600; }
+  .discovery-empty { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 20px; }
+
+  /* ── Recent ── */
+  .recent-list { display: flex; flex-direction: column; gap: 5px; }
+  .recent-item { display: flex; align-items: center; gap: 10px; font-size: 0.82rem; padding: 5px; border-radius: 6px; }
+  .recent-item:hover { background: var(--card2); }
+  .recent-item img { width: 34px; height: 34px; border-radius: 4px; background: #333; flex-shrink: 0; }
   .recent-item .r-info { flex: 1; min-width: 0; }
   .recent-item .r-name { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .recent-item .r-artist { font-size: 0.75rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .recent-item .r-time { font-size: 0.7rem; color: #555; flex-shrink: 0; }
+  .recent-item .r-artist { font-size: 0.7rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .recent-item .r-time { font-size: 0.65rem; color: #555; flex-shrink: 0; }
 
-  /* Stats row */
-  .stats-row { display: flex; gap: 12px; margin-bottom: 16px; }
-  .stat-box { flex: 1; background: var(--card); border-radius: 12px; padding: 14px; text-align: center; }
-  .stat-val { font-size: 1.6rem; font-weight: bold; color: var(--accent); }
-  .stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+  /* ── Footer ── */
+  footer { text-align: center; color: #444; font-size: 0.65rem; margin-top: 24px; padding: 12px; }
 
-  @media (max-width: 400px) {
-    .artists-grid { grid-template-columns: repeat(2, 1fr); }
+  /* ── Mobile ── */
+  @media (max-width: 500px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
     .features-grid { grid-template-columns: repeat(2, 1fr); }
+    .artists-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .artist-card img { width: 56px; height: 56px; }
+    .discovery-grid { grid-template-columns: repeat(2, 1fr); }
+    h2 { font-size: 0.9rem; }
   }
 </style>
 </head>
 <body>
 
-<h1>🎵 品味分析</h1>
-<p style="color:var(--muted);font-size:0.8rem;">數據基於中期聆聽 (medium term) · {{ now() }}</p>
+<header>
+  <h1>🎵 品味分析</h1>
+  <p class="subtitle">Spotify · {{ now() }}</p>
+
+  <!-- Time Range Selector -->
+  <div class="range-selector">
+    <a href="/?range=short_term"   class="range-btn {{ 'active' if time_range == 'short_term' else '' }}">4 週</a>
+    <a href="/?range=medium_term"  class="range-btn {{ 'active' if time_range == 'medium_term' else '' }}">6 個月</a>
+    <a href="/?range=long_term"    class="range-btn {{ 'active' if time_range == 'long_term' else '' }}">All Time</a>
+  </div>
+</header>
 
 <!-- Stats -->
 <div class="stats-row">
@@ -101,101 +159,150 @@
     <div class="stat-label">Top Tracks</div>
   </div>
   <div class="stat-box">
-    <div class="stat-val">{{ recent|length }}</div>
-    <div class="stat-label">Recent</div>
+    <div class="stat-val secondary">{{ stats.popularity }}</div>
+    <div class="stat-label">Avg Popularity</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-val">{{ stats.duration }}m</div>
+    <div class="stat-label">Top 50 Duration</div>
   </div>
 </div>
 
-<!-- Audio Features (placeholder) -->
-<h2>🎛️ 聆聽特徵</h2>
-<div class="features-grid">
-  <div class="feature-card">
-    <div class="feature-value">{{ (features.danceability * 100)|round|int }}%</div>
-    <div class="feature-label">🎶 Danceability</div>
-    <div class="feature-bar-bg"><div class="feature-bar-fill" style="width:{{ features.danceability * 100 }}%"></div></div>
-  </div>
-  <div class="feature-card">
-    <div class="feature-value">{{ (features.energy * 100)|round|int }}%</div>
-    <div class="feature-label">⚡ Energy</div>
-    <div class="feature-bar-bg"><div class="feature-bar-fill" style="width:{{ features.energy * 100 }}%"></div></div>
-  </div>
-  <div class="feature-card">
-    <div class="feature-value">{{ (features.valence * 100)|round|int }}%</div>
-    <div class="feature-label">😊 Valence</div>
-    <div class="feature-bar-bg"><div class="feature-bar-fill" style="width:{{ features.valence * 100 }}%"></div></div>
-  </div>
-  <div class="feature-card">
-    <div class="feature-value">{{ (features.tempo / 2)|round|int }}</div>
-    <div class="feature-label">💓 Avg Tempo</div>
-    <div class="feature-bar-bg"><div class="feature-bar-fill" style="width:{{ (features.tempo / 2 / 100 * 100) if features.tempo else 0 }}%"></div></div>
-  </div>
-</div>
-
-<!-- Decade Distribution -->
-<h2>📅 年代分佈</h2>
+<!-- Audio Features -->
+<h2><span class="icon">🎛️</span> 聆聽特徵</h2>
 <div class="section">
-  <div class="decade-bar-chart">
-    {% for decade, count in top_decades %}
-    <div class="decade-row">
-      <div class="decade-label">{{ decade }}</div>
-      <div class="decade-bar-bg">
-        <div class="decade-bar-fill" style="width:{{ (count / 50 * 100)|round }}%"></div>
-      </div>
-      <div class="decade-count">{{ count }}</div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-value">{{ (features.danceability * 100)|round|int }}%</div>
+      <div class="feature-label">Danceability</div>
+      <div class="feature-bar-bg"><div class="feature-bar-fill" style="width:{{ features.danceability * 100 }}%"></div></div>
     </div>
-    {% endfor %}
+    <div class="feature-card">
+      <div class="feature-value">{{ (features.energy * 100)|round|int }}%</div>
+      <div class="feature-label">Energy</div>
+      <div class="feature-bar-bg"><div class="feature-bar-fill" style="width:{{ features.energy * 100 }}%"></div></div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-value">{{ (features.valence * 100)|round|int }}%</div>
+      <div class="feature-label">Valence</div>
+      <div class="feature-bar-bg"><div class="feature-bar-fill" style="width:{{ features.valence * 100 }}%"></div></div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-value">{{ features.tempo|round|int }}</div>
+      <div class="feature-label">Avg BPM</div>
+      <div class="feature-bar-bg"><div class="feature-bar-fill" style="width:{{ (features.tempo / 200 * 100) }}%"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Two-column: Decade + Listening Time -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+  <div class="section">
+    <h2 style="margin-top:0;font-size:0.9rem;"><span class="icon">📅</span> 年代分佈</h2>
+    <div class="decade-bar-chart">
+      {% for decade, count in top_decades %}
+      <div class="decade-row">
+        <div class="decade-label">{{ decade }}</div>
+        <div class="decade-bar-bg">
+          <div class="decade-bar-fill" style="width:{{ (count / 50 * 100)|round }}%"></div>
+        </div>
+        <div class="decade-count">{{ count }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 style="margin-top:0;font-size:0.9rem;"><span class="icon">🕐</span> 聆聽時段</h2>
+    <div class="time-chart">
+      {% for label, count in sorted_hours %}
+      {% if count > 0 %}
+      <div class="time-row">
+        <div class="time-label">{{ label }}</div>
+        <div class="time-bar-bg">
+          <div class="time-bar-fill" style="width:{{ (count / 50 * 100)|round }}%"></div>
+        </div>
+        <div class="time-count">{{ count }}</div>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
   </div>
 </div>
 
 <!-- Genre Distribution -->
-<h2>🏷️ 流派分佈</h2>
+<h2><span class="icon">🏷️</span> 流派分佈</h2>
 <div class="section">
   <div class="genre-chart">
     {% for genre, count in top_genres %}
     <div class="genre-tag">
-      <div class="bar" style="width:{{ (count * 4)|int }}px"></div>
+      <div class="bar" style="width:{{ (count * 3)|int + 4 }}px"></div>
       <span class="name">{{ genre }}</span>
-      <span class="count">{{ count }}</span>
+      <span class="count">×{{ count }}</span>
     </div>
     {% endfor %}
   </div>
 </div>
 
+<!-- Discovery Radar -->
+<h2><span class="icon">🔭</span> Discovery Radar</h2>
+<div class="section">
+  {% if discovery_tracks and discovery_tracks|length > 0 %}
+  <div class="discovery-grid">
+    {% for track in discovery_tracks %}
+    <div class="discovery-card">
+      {% set album_images = track['album']['images'] if track['album'] else [] %}
+      {% if album_images and album_images|length > 0 %}
+      <img src="{{ album_images[-1]['url'] }}" alt="{{ track['name'] }}" loading="lazy">
+      {% else %}
+      <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23333' width='100' height='100'/><text x='50' y='55' text-anchor='middle' fill='%23666' font-size='30'>♪</text></svg>" alt="no cover">
+      {% endif %}
+      <div class="name">{{ track['name'] }}</div>
+      <div class="artist">{% for a in track['artists'] %}{{ a['name'] }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
+      <div class="badge">新發現</div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="discovery-empty">加載中你嘅新音樂探索...</div>
+  {% endif %}
+</div>
+
 <!-- Top Artists -->
-<h2>👤 Top Artists</h2>
+<h2><span class="icon">👤</span> Top Artists</h2>
 <div class="section">
   <div class="artists-grid">
     {% for artist in top_artists[:20] %}
     <div class="artist-card">
-      {% set has_images = artist.images and artist.images|length > 0 %}
-      {% if has_images %}
-      <img src="{{ artist['images'][0]['url'] }}" alt="{{ artist['name'] }}" loading="lazy">
+      {% set a_images = artist['images'] if artist['images'] else [] %}
+      {% if a_images and a_images|length > 0 %}
+      <img src="{{ a_images[0]['url'] }}" alt="{{ artist['name'] }}" loading="lazy">
       {% else %}
-      <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23333' width='100' height='100'/><text x='50' y='60' text-anchor='middle' fill='%23666' font-size='40'>?</text></svg>" alt="no image">
+      <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23333' width='100' height='100'/><text x='50' y='58' text-anchor='middle' fill='%23666' font-size='36'>?</text></svg>" alt="no image">
       {% endif %}
       <div class="name">{{ artist['name'] }}</div>
-      {% set artist_genres = artist['genres'] if artist['genres'] else [] %}
-      <div class="genres">{% for g in artist_genres[:2] %}{{ g }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
+      {% set a_genres = artist['genres'] if artist['genres'] else [] %}
+      <div class="genres">{% for g in a_genres[:2] %}{{ g }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
     </div>
     {% endfor %}
   </div>
 </div>
 
 <!-- Top Tracks -->
-<h2>🎧 Top Tracks</h2>
+<h2><span class="icon">🎧</span> Top Tracks</h2>
 <div class="section">
   <div class="tracks-list">
     {% for track in top_tracks[:30] %}
     <div class="track-item">
       <div class="track-rank">{{ loop.index }}</div>
-      {% set track_album = track['album'] %}
-      {% if track_album and track_album['images'] and track_album['images']|length > 0 %}
-      <img src="{{ track_album['images'][-1]['url'] }}" alt="{{ track['name'] }}" loading="lazy">
+      {% set t_album = track['album'] %}
+      {% if t_album and t_album['images'] and t_album['images']|length > 0 %}
+      <img src="{{ t_album['images'][-1]['url'] }}" alt="{{ track['name'] }}" loading="lazy">
       {% endif %}
       <div class="track-info">
         <div class="name">{{ track['name'] }}</div>
         <div class="artist">{% for a in track['artists'] %}{{ a['name'] }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
-        <div class="album">{{ track_album['name'] if track_album else '' }}</div>
+        <div class="album">{{ t_album['name'] if t_album else '' }}</div>
       </div>
     </div>
     {% endfor %}
@@ -203,19 +310,19 @@
 </div>
 
 <!-- Recently Played -->
-<h2>⏱️ 最近播放</h2>
+<h2><span class="icon">⏱️</span> 最近播放</h2>
 <div class="section">
   <div class="recent-list">
     {% for item in recent %}
     <div class="recent-item">
-      {% set item_track = item['track'] %}
-      {% set item_album = item_track['album'] if item_track else None %}
-      {% if item_album and item_album['images'] and item_album['images']|length > 0 %}
-      <img src="{{ item_album['images'][-1]['url'] }}" alt="{{ item_track['name'] }}" loading="lazy">
+      {% set i_track = item['track'] %}
+      {% set i_album = i_track['album'] if i_track else None %}
+      {% if i_album and i_album['images'] and i_album['images']|length > 0 %}
+      <img src="{{ i_album['images'][-1]['url'] }}" alt="{{ i_track['name'] }}" loading="lazy">
       {% endif %}
       <div class="r-info">
-        <div class="r-name">{{ item_track['name'] if item_track else '' }}</div>
-        <div class="r-artist">{% for a in item_track['artists'] %}{{ a['name'] }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
+        <div class="r-name">{{ i_track['name'] if i_track else '' }}</div>
+        <div class="r-artist">{% for a in i_track['artists'] %}{{ a['name'] }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
       </div>
       <div class="r-time">{{ (item['played_at'][11:16]) if item['played_at'] else '' }}</div>
     </div>
@@ -223,8 +330,6 @@
   </div>
 </div>
 
-<p style="text-align:center;color:#444;font-size:0.7rem;margin-top:32px;margin-bottom:16px;">
-  Powered by Spotify API
-</p>
+<footer>Powered by Spotify API · 品味分析 v2.0</footer>
 </body>
 </html>
