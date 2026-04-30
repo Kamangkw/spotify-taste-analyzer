@@ -3,51 +3,70 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🎵 品味分析 — Spotify</title>
+<title>🎵 品味分析 v7 — Spotify</title>
 <style>
   :root {
-    --bg: #121212;
-    --card: #1e1e1e;
-    --card2: #252525;
-    --card3: #2a2a2a;
+    --bg: #0d0d0d;
+    --card: #1a1a1a;
+    --card2: #222;
+    --card3: #282828;
     --accent: #1DB954;
     --accent2: #509bf5;
     --accent3: #e91e63;
     --accent4: #ff9800;
+    --accent5: #9c27b0;
     --text: #e0e0e0;
-    --muted: #888;
+    --muted: #777;
     --border: #333;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, sans-serif; padding: 12px; max-width: 860px; margin: 0 auto; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, sans-serif; padding: 10px; max-width: 900px; margin: 0 auto; }
 
   /* ── Header ── */
-  header { text-align: center; padding: 18px 0 10px; }
-  h1 { font-size: 1.8rem; color: var(--accent); margin-bottom: 4px; }
-  .subtitle { color: var(--muted); font-size: 0.78rem; margin-bottom: 10px; }
+  header { text-align: center; padding: 16px 0 8px; }
+  h1 { font-size: 1.7rem; color: var(--accent); margin-bottom: 3px; letter-spacing: -0.5px; }
+  .subtitle { color: var(--muted); font-size: 0.75rem; margin-bottom: 10px; }
 
-  /* ── Taste Profile Banner ── */
+  /* ── Profile Banner ── */
   .profile-banner {
-    background: linear-gradient(135deg, #1a2a1a 0%, #1e3a1e 50%, #1a2a2a 100%);
+    background: linear-gradient(135deg, #0f2a0f 0%, #1a3a1a 40%, #1a2a2a 70%, #2a1a3a 100%);
     border: 1px solid #2a4a2a;
     border-radius: 14px;
-    padding: 16px 20px;
+    padding: 14px 18px;
     text-align: center;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
-  .profile-emoji { font-size: 2.2rem; margin-bottom: 6px; }
-  .profile-text { font-size: 1.05rem; font-weight: 600; color: var(--text); }
-  .profile-sub { font-size: 0.72rem; color: var(--muted); margin-top: 4px; }
+  .profile-emoji { font-size: 2rem; }
+  .profile-text { font-size: 1rem; font-weight: 600; margin-top: 4px; }
+  .profile-sub { font-size: 0.7rem; color: var(--muted); margin-top: 3px; }
 
-  /* ── Time Range Selector ── */
-  .range-selector { display: flex; justify-content: center; gap: 6px; margin-bottom: 16px; }
+  /* ── Share Button ── */
+  .share-row { display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; }
+  .share-btn {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .share-btn:hover { border-color: var(--accent); background: var(--card3); }
+  .share-btn.copied { border-color: var(--accent); color: var(--accent); }
+
+  /* ── Range Selector ── */
+  .range-selector { display: flex; justify-content: center; gap: 5px; margin-bottom: 14px; }
   .range-btn {
-    padding: 7px 16px;
+    padding: 6px 14px;
     border-radius: 20px;
     border: 1px solid var(--border);
     background: var(--card);
     color: var(--muted);
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     cursor: pointer;
     text-decoration: none;
     transition: all 0.2s;
@@ -56,183 +75,171 @@
   .range-btn.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600; }
 
   /* ── Stats Row ── */
-  .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 14px; }
-  .stat-box { background: var(--card); border-radius: 10px; padding: 10px 6px; text-align: center; }
-  .stat-val { font-size: 1.3rem; font-weight: bold; color: var(--accent); }
-  .stat-val.secondary { color: var(--accent2); }
-  .stat-val.accent3 { color: var(--accent3); }
-  .stat-val.accent4 { color: var(--accent4); }
-  .stat-label { font-size: 0.6rem; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
-
-  /* ── Listening Streak ── */
-  .streak-bar { display: flex; gap: 3px; justify-content: center; margin-top: 6px; }
-  .streak-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
-  .streak-dot.active { background: var(--accent); }
-  .streak-text { font-size: 0.7rem; color: var(--muted); margin-top: 3px; }
+  .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 12px; }
+  .stat-box { background: var(--card); border-radius: 10px; padding: 9px 5px; text-align: center; }
+  .stat-val { font-size: 1.2rem; font-weight: bold; color: var(--accent); }
+  .stat-val.s2 { color: var(--accent2); }
+  .stat-val.s3 { color: var(--accent3); }
+  .stat-val.s4 { color: var(--accent4); }
+  .stat-label { font-size: 0.58rem; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.4px; }
 
   /* ── Section ── */
-  h2 { font-size: 0.95rem; color: var(--text); margin: 20px 0 10px; display: flex; align-items: center; gap: 8px; }
-  h2 .icon { font-size: 1.1rem; }
-  .section { background: var(--card); border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+  h2 { font-size: 0.9rem; color: var(--text); margin: 18px 0 8px; display: flex; align-items: center; gap: 7px; }
+  h2 .icon { font-size: 1rem; }
+  .section { background: var(--card); border-radius: 12px; padding: 12px; margin-bottom: 10px; }
 
-  /* ── Radar Chart (CSS) ── */
-  .radar-section { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .radar-chart-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-  .radar-chart {
-    position: relative;
-    width: 160px;
-    height: 160px;
-  }
-  .radar-bg {
-    position: absolute; inset: 0;
-    border-radius: 50%;
-    border: 1px solid #333;
-    background: conic-gradient(from 0deg, #1a3a1a 0deg, #1a2a3a 90deg, #2a1a3a 180deg, #3a1a2a 270deg, #1a3a1a 360deg);
-    opacity: 0.3;
-  }
-  .radar-fill {
-    position: absolute; inset: 0;
-    border-radius: 50%;
-    background: conic-gradient(
-      from -90deg,
-      var(--accent) 0deg,
-      var(--accent2) calc(var(--dance, 55) * 3.6deg),
-      var(--accent2) calc(var(--dance, 55) * 3.6deg),
-      var(--accent3) calc(calc(var(--dance, 55) + var(--energy, 58)) * 1.8deg),
-      var(--accent3) calc(calc(var(--dance, 55) + var(--energy, 58)) * 1.8deg),
-      var(--accent4) calc(calc(var(--dance, 55) + var(--energy, 58) + var(--valence, 50)) * 1.8deg),
-      var(--accent4) calc(calc(var(--dance, 55) + var(--energy, 58) + var(--valence, 50)) * 1.8deg),
-      var(--accent) calc(calc(var(--dance, 55) + var(--energy, 58) + var(--valence, 50)) * 1.8deg)
-    );
-    opacity: 0.55;
-    animation: radar-spin 20s linear infinite;
-  }
-  @keyframes radar-spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-  .radar-center { position: absolute; inset: 40%; border-radius: 50%; background: var(--card); border: 1px solid #333; }
-  .radar-labels { display: flex; flex-direction: column; gap: 6px; width: 100%; }
-  .radar-label-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; }
-  .radar-label-key { color: var(--muted); }
-  .radar-label-val { color: var(--accent); font-weight: 600; }
-  .radar-label-bar { flex: 1; height: 3px; background: var(--card2); margin: 0 8px; border-radius: 2px; overflow: hidden; }
-  .radar-label-fill { height: 100%; border-radius: 2px; }
+  /* ── SVG Radar Chart ── */
+  .radar-wrap { display: flex; align-items: center; gap: 14px; }
+  .radar-svg { flex-shrink: 0; }
+  .radar-labels { flex: 1; display: flex; flex-direction: column; gap: 7px; }
+  .radar-label-row { display: flex; align-items: center; gap: 7px; }
+  .radar-label-key { font-size: 0.68rem; color: var(--muted); width: 70px; flex-shrink: 0; }
+  .radar-label-bar { flex: 1; height: 5px; background: var(--card2); border-radius: 3px; overflow: hidden; }
+  .radar-label-fill { height: 100%; border-radius: 3px; }
+  .radar-label-val { font-size: 0.68rem; font-weight: 600; width: 34px; text-align: right; flex-shrink: 0; }
 
-  /* ── Features Grid ── */
-  .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-  .feature-card { background: var(--card2); border-radius: 8px; padding: 8px 5px; text-align: center; }
-  .feature-value { font-size: 1.2rem; font-weight: bold; }
-  .feature-label { font-size: 0.6rem; color: var(--muted); margin-top: 2px; }
-  .feature-bar-bg { height: 3px; background: #333; border-radius: 2px; margin-top: 5px; overflow: hidden; }
-  .feature-bar-fill { height: 100%; border-radius: 2px; }
+  /* ── Calendar Heatmap ── */
+  .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+  .cal-header { font-size: 0.58rem; color: var(--muted); text-align: center; padding: 2px 0; }
+  .cal-cell {
+    aspect-ratio: 1;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+    min-height: 28px;
+  }
+  .cal-cell .day-num { font-size: 0.6rem; font-weight: 600; line-height: 1; }
+  .cal-cell .day-count { font-size: 0.48rem; opacity: 0.7; line-height: 1; margin-top: 1px; }
+  .cal-cell.level-0 { background: var(--card2); }
+  .cal-cell.level-1 { background: #1a3a1a; }
+  .cal-cell.level-2 { background: #1a5a1a; }
+  .cal-cell.level-3 { background: #1a7a1a; }
+  .cal-cell.level-4 { background: var(--accent); }
+  .cal-cell.future { background: transparent; }
+
+  /* ── Compare Ranges ── */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .compare-col h3 { font-size: 0.78rem; margin-bottom: 6px; display: flex; align-items: center; gap: 4px; }
+  .compare-col h3.rising { color: var(--accent); }
+  .compare-col h3.declining { color: var(--accent3); }
+  .compare-genre-row { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; padding: 4px 6px; background: var(--card2); border-radius: 5px; }
+  .compare-genre-name { font-size: 0.72rem; flex: 1; }
+  .compare-bar-bg { width: 60px; height: 4px; background: #333; border-radius: 2px; overflow: hidden; }
+  .compare-bar-fill { height: 100%; border-radius: 2px; }
+  .compare-arrow { font-size: 0.65rem; }
 
   /* ── Mood Timeline ── */
-  .mood-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 6px; }
-  .mood-card {
-    background: var(--card2);
-    border-radius: 8px;
-    padding: 10px 8px;
-    text-align: center;
-    transition: transform 0.2s;
-  }
-  .mood-card:hover { transform: translateY(-2px); }
-  .mood-emoji { font-size: 1.5rem; }
-  .mood-label { font-size: 0.72rem; font-weight: 600; margin-top: 3px; }
-  .mood-icon { font-size: 0.62rem; color: var(--muted); }
+  .mood-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 5px; }
+  .mood-card { background: var(--card2); border-radius: 8px; padding: 8px 6px; text-align: center; }
+  .mood-emoji { font-size: 1.4rem; }
+  .mood-label { font-size: 0.68rem; font-weight: 600; margin-top: 2px; }
+  .mood-icon { font-size: 0.58rem; color: var(--muted); }
   .mood-bar-bg { height: 3px; background: #333; border-radius: 2px; margin-top: 5px; overflow: hidden; }
-  .mood-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; }
+  .mood-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.6s; }
 
-  /* ── Decade Bar ── */
-  .decade-bar-chart { display: flex; flex-direction: column; gap: 5px; }
-  .decade-row { display: flex; align-items: center; gap: 8px; }
-  .decade-label { font-size: 0.72rem; width: 80px; color: var(--muted); flex-shrink: 0; }
-  .decade-bar-bg { flex: 1; height: 14px; background: var(--card2); border-radius: 4px; overflow: hidden; }
-  .decade-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 4px; transition: width 0.6s ease; }
-  .decade-count { font-size: 0.7rem; width: 22px; text-align: right; color: var(--accent); flex-shrink: 0; }
+  /* ── Decade ── */
+  .decade-row { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; }
+  .decade-label { font-size: 0.7rem; width: 72px; color: var(--muted); flex-shrink: 0; }
+  .decade-bar-bg { flex: 1; height: 12px; background: var(--card2); border-radius: 3px; overflow: hidden; }
+  .decade-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 3px; transition: width 0.6s; }
+  .decade-count { font-size: 0.68rem; width: 20px; text-align: right; color: var(--accent); flex-shrink: 0; }
 
-  /* ── Listening Time ── */
-  .time-chart { display: flex; flex-direction: column; gap: 5px; }
-  .time-row { display: flex; align-items: center; gap: 8px; }
-  .time-label { font-size: 0.72rem; width: 110px; color: var(--muted); flex-shrink: 0; }
-  .time-bar-bg { flex: 1; height: 12px; background: var(--card2); border-radius: 4px; overflow: hidden; }
-  .time-bar-fill { height: 100%; background: var(--accent3); border-radius: 4px; transition: width 0.6s ease; }
-  .time-count { font-size: 0.7rem; width: 22px; text-align: right; color: var(--accent3); flex-shrink: 0; }
+  /* ── Time ── */
+  .time-row { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; }
+  .time-label { font-size: 0.7rem; width: 100px; color: var(--muted); flex-shrink: 0; }
+  .time-bar-bg { flex: 1; height: 10px; background: var(--card2); border-radius: 3px; overflow: hidden; }
+  .time-bar-fill { height: 100%; background: var(--accent3); border-radius: 3px; transition: width 0.6s; }
+  .time-count { font-size: 0.68rem; width: 20px; text-align: right; color: var(--accent3); flex-shrink: 0; }
 
   /* ── Genre Tags ── */
-  .genre-chart { display: flex; flex-wrap: wrap; gap: 5px; }
-  .genre-tag { background: var(--card2); border-radius: 20px; padding: 4px 9px; font-size: 0.7rem; display: flex; align-items: center; gap: 4px; }
+  .genre-chart { display: flex; flex-wrap: wrap; gap: 4px; }
+  .genre-tag { background: var(--card2); border-radius: 20px; padding: 3px 8px; font-size: 0.68rem; display: flex; align-items: center; gap: 3px; }
   .genre-tag .bar { height: 4px; background: var(--accent); border-radius: 2px; min-width: 4px; }
   .genre-tag .name { color: var(--text); }
   .genre-tag .count { color: var(--muted); }
 
   /* ── Signal / Noise ── */
-  .signal-noise-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .sn-section h3 { font-size: 0.8rem; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
-  .sn-section h3.gem { color: var(--accent); }
-  .sn-section h3.noise { color: var(--accent3); }
-  .sn-list { display: flex; flex-direction: column; gap: 5px; }
-  .sn-item { display: flex; align-items: center; gap: 8px; padding: 5px; background: var(--card2); border-radius: 6px; }
-  .sn-item img { width: 32px; height: 32px; border-radius: 4px; background: #333; flex-shrink: 0; }
+  .sn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .sn-col h3 { font-size: 0.75rem; margin-bottom: 6px; display: flex; align-items: center; gap: 4px; }
+  .sn-col h3.gem { color: var(--accent); }
+  .sn-col h3.noise { color: var(--accent3); }
+  .sn-item { display: flex; align-items: center; gap: 7px; padding: 4px; background: var(--card2); border-radius: 5px; margin-bottom: 4px; }
+  .sn-item img { width: 30px; height: 30px; border-radius: 4px; background: #333; flex-shrink: 0; }
   .sn-info { flex: 1; min-width: 0; }
-  .sn-name { font-size: 0.78rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .sn-artist { font-size: 0.65rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .sn-badge { font-size: 0.6rem; padding: 2px 5px; border-radius: 8px; flex-shrink: 0; }
-  .sn-badge.gem { background: #1a3a1a; color: var(--accent); }
-  .sn-badge.noise { background: #3a1a2a; color: var(--accent3); }
+  .sn-name { font-size: 0.72rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sn-artist { font-size: 0.6rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sn-badge { font-size: 0.6rem; flex-shrink: 0; }
+  .sn-badge.gem { color: var(--accent); }
+  .sn-badge.noise { color: var(--accent3); }
+
+  /* ── Top Collaborators ── */
+  .collab-grid { display: flex; flex-direction: column; gap: 5px; }
+  .collab-row { display: flex; align-items: center; gap: 8px; padding: 5px 7px; background: var(--card2); border-radius: 6px; }
+  .collab-rank { font-size: 0.7rem; color: var(--muted); width: 18px; text-align: center; flex-shrink: 0; }
+  .collab-avatar { width: 28px; height: 28px; border-radius: 50%; background: #333; flex-shrink: 0; object-fit: cover; }
+  .collab-name { font-size: 0.78rem; font-weight: 600; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .collab-count { font-size: 0.65rem; color: var(--muted); flex-shrink: 0; }
+  .collab-bar-bg { width: 60px; height: 4px; background: #333; border-radius: 2px; overflow: hidden; flex-shrink: 0; }
+  .collab-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; }
 
   /* ── Artists Grid ── */
-  .artists-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
-  .artist-card { background: var(--card2); border-radius: 8px; padding: 8px; text-align: center; }
-  .artist-card img { width: 68px; height: 68px; border-radius: 50%; object-fit: cover; margin-bottom: 5px; background: #333; }
-  .artist-card .name { font-size: 0.75rem; font-weight: 600; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .artist-card .genres { font-size: 0.6rem; color: var(--muted); line-height: 1.3; }
+  .artists-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 7px; }
+  .artist-card { background: var(--card2); border-radius: 8px; padding: 7px; text-align: center; }
+  .artist-card img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; margin-bottom: 4px; background: #333; }
+  .artist-card .name { font-size: 0.7rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .artist-card .genres { font-size: 0.58rem; color: var(--muted); line-height: 1.3; }
 
   /* ── Tracks List ── */
-  .tracks-list { display: flex; flex-direction: column; gap: 5px; }
-  .track-item { display: flex; align-items: center; gap: 9px; padding: 6px; background: var(--card2); border-radius: 8px; transition: background 0.15s; }
+  .tracks-list { display: flex; flex-direction: column; gap: 4px; }
+  .track-item { display: flex; align-items: center; gap: 8px; padding: 5px; background: var(--card2); border-radius: 6px; transition: background 0.15s; cursor: default; }
   .track-item:hover { background: var(--card3); }
-  .track-item img { width: 38px; height: 38px; border-radius: 4px; background: #333; flex-shrink: 0; }
+  .track-item img { width: 36px; height: 36px; border-radius: 4px; background: #333; flex-shrink: 0; }
   .track-info { flex: 1; min-width: 0; }
-  .track-info .name { font-size: 0.82rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .track-info .artist { font-size: 0.68rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .track-info .album { font-size: 0.62rem; color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .track-rank { font-size: 0.9rem; color: var(--accent); font-weight: bold; width: 22px; text-align: center; flex-shrink: 0; }
+  .track-info .name { font-size: 0.8rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .track-info .artist { font-size: 0.65rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .track-rank { font-size: 0.82rem; color: var(--accent); font-weight: bold; width: 20px; text-align: center; flex-shrink: 0; }
 
   /* ── Recent ── */
-  .recent-list { display: flex; flex-direction: column; gap: 4px; }
-  .recent-item { display: flex; align-items: center; gap: 9px; font-size: 0.8rem; padding: 5px; border-radius: 6px; transition: background 0.15s; }
+  .recent-list { display: flex; flex-direction: column; gap: 3px; }
+  .recent-item { display: flex; align-items: center; gap: 8px; padding: 4px; border-radius: 5px; transition: background 0.15s; }
   .recent-item:hover { background: var(--card2); }
-  .recent-item img { width: 32px; height: 32px; border-radius: 4px; background: #333; flex-shrink: 0; }
+  .recent-item img { width: 30px; height: 30px; border-radius: 4px; background: #333; flex-shrink: 0; }
   .recent-item .r-info { flex: 1; min-width: 0; }
-  .recent-item .r-name { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .recent-item .r-artist { font-size: 0.68rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .recent-item .r-time { font-size: 0.62rem; color: #555; flex-shrink: 0; }
+  .recent-item .r-name { font-size: 0.78rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .recent-item .r-artist { font-size: 0.65rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .recent-item .r-time { font-size: 0.58rem; color: #555; flex-shrink: 0; }
 
   /* ── Footer ── */
-  footer { text-align: center; color: #444; font-size: 0.62rem; margin-top: 20px; padding: 12px; }
+  footer { text-align: center; color: #333; font-size: 0.6rem; margin-top: 18px; padding: 10px; }
 
   /* ── Animations ── */
   @keyframes fade-up {
-    from { opacity: 0; transform: translateY(12px); }
+    from { opacity: 0; transform: translateY(10px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-  .section, .stats-row, .profile-banner { animation: fade-up 0.5s ease both; }
-  .stats-row  { animation-delay: 0.05s; }
-  .section:nth-child(2) { animation-delay: 0.1s; }
-  .section:nth-child(3) { animation-delay: 0.15s; }
-  .section:nth-child(4) { animation-delay: 0.2s; }
+  .profile-banner, .stats-row, .section { animation: fade-up 0.4s ease both; }
+  .stats-row  { animation-delay: 0.04s; }
+  .section    { animation-delay: 0.08s; }
+
+  /* ── Loading skeleton ── */
+  @keyframes shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .skeleton { background: linear-gradient(90deg, var(--card2) 25%, var(--card3) 50%, var(--card2) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 4px; }
 
   /* ── Mobile ── */
   @media (max-width: 600px) {
     .stats-row { grid-template-columns: repeat(3, 1fr); }
-    .features-grid { grid-template-columns: repeat(2, 1fr); }
     .artists-grid { grid-template-columns: repeat(3, 1fr); gap: 5px; }
-    .artist-card img { width: 54px; height: 54px; }
-    .radar-section { grid-template-columns: 1fr; }
-    .signal-noise-grid { grid-template-columns: 1fr; }
+    .artist-card img { width: 52px; height: 52px; }
+    .radar-wrap { flex-direction: column; }
+    .compare-grid, .sn-grid { grid-template-columns: 1fr; }
     .mood-grid { grid-template-columns: repeat(2, 1fr); }
-    h2 { font-size: 0.88rem; }
+    h2 { font-size: 0.85rem; }
   }
 </style>
 </head>
@@ -240,7 +247,13 @@
 
 <header>
   <h1>🎵 品味分析</h1>
-  <p class="subtitle">Spotify · {{ now() }}</p>
+  <p class="subtitle">Spotify · v7.0 · {{ now() }}</p>
+
+  <!-- Share Button -->
+  <div class="share-row">
+    <button class="share-btn" onclick="copyShare()">📋 複製分享文字</button>
+    <button class="share-btn" onclick="refreshData()">🔄 刷新數據</button>
+  </div>
 
   <!-- Time Range Selector -->
   <div class="range-selector">
@@ -254,189 +267,223 @@
 <div class="profile-banner">
   <div class="profile-emoji">🎭</div>
   <div class="profile-text">{{ taste_profile }}</div>
-  <div class="profile-sub">基於流派特徵估算 · {{ streak.status }}</div>
+  <div class="profile-sub">{{ streak.status }}</div>
 </div>
 
 <!-- Stats -->
 <div class="stats-row">
-  <div class="stat-box">
-    <div class="stat-val">{{ top_artists|length }}</div>
-    <div class="stat-label">Top Artists</div>
-  </div>
-  <div class="stat-box">
-    <div class="stat-val secondary">{{ top_tracks|length }}</div>
-    <div class="stat-label">Top Tracks</div>
-  </div>
-  <div class="stat-box">
-    <div class="stat-val accent3">{{ stats.popularity }}</div>
-    <div class="stat-label">Avg Pop</div>
-  </div>
-  <div class="stat-box">
-    <div class="stat-val accent4">{{ stats.duration }}m</div>
-    <div class="stat-label">Top50 Length</div>
-  </div>
-  <div class="stat-box">
-    <div class="stat-val">{{ stats.genres }}</div>
-    <div class="stat-label">Genres</div>
+  <div class="stat-box"><div class="stat-val">{{ top_artists|length }}</div><div class="stat-label">Artists</div></div>
+  <div class="stat-box"><div class="stat-val s2">{{ top_tracks|length }}</div><div class="stat-label">Tracks</div></div>
+  <div class="stat-box"><div class="stat-val s3">{{ stats.popularity }}</div><div class="stat-label">Avg Pop</div></div>
+  <div class="stat-box"><div class="stat-val s4">{{ stats.duration }}m</div><div class="stat-label">Top50 Len</div></div>
+  <div class="stat-box"><div class="stat-val">{{ stats.genres }}</div><div class="stat-label">Genres</div></div>
+</div>
+
+<!-- SVG Radar + Features -->
+<div class="section" style="padding: 12px;">
+  <h2 style="margin-top:0;"><span class="icon">📊</span> 聆聽特徵雷達</h2>
+  <div class="radar-wrap">
+    <!-- SVG Radar Chart -->
+    <svg class="radar-svg" width="160" height="160" viewBox="0 0 160 160">
+      <!-- Background circles -->
+      <circle cx="80" cy="80" r="70" fill="none" stroke="#333" stroke-width="0.5"/>
+      <circle cx="80" cy="80" r="52" fill="none" stroke="#333" stroke-width="0.5"/>
+      <circle cx="80" cy="80" r="35" fill="none" stroke="#333" stroke-width="0.5"/>
+      <!-- Axis lines -->
+      <line x1="80" y1="10" x2="80" y2="150" stroke="#333" stroke-width="0.5"/>
+      <line x1="10" y1="80" x2="150" y2="80" stroke="#333" stroke-width="0.5"/>
+      <line x1="30" y1="30" x2="130" y2="130" stroke="#333" stroke-width="0.5"/>
+      <line x1="130" y1="30" x2="30" y2="130" stroke="#333" stroke-width="0.5"/>
+      <!-- Dance axis label -->
+      <text x="80" y="8" text-anchor="middle" fill="#777" font-size="8">Dance</text>
+      <text x="80" y="158" text-anchor="middle" fill="#777" font-size="8">Energy</text>
+      <text x="5" y="83" text-anchor="middle" fill="#777" font-size="8">Valence</text>
+      <!-- Filled polygon -->
+      <polygon
+        points="{{ 80 + (features.danceability * 0.8 * 70) }},{{ 80 - (features.danceability * 0.8 * 70 * 0) }}"
+        "{{ 80 + (features.energy * 0.8 * 70 * 0.866) }},{{ 80 + (features.energy * 0.8 * 70 * 0.5) }}"
+        fill="rgba(29,185,84,0.25)" stroke="rgba(29,185,84,0.7)" stroke-width="1.5"
+      />
+      <!-- Dance point -->
+      <circle cx="{{ 80 + (features.danceability * 0.8 * 70) }}" cy="80" r="4" fill="#1DB954"/>
+      <!-- Energy point -->
+      <circle cx="{{ 80 + (features.energy * 0.8 * 70 * 0.866) }}" cy="{{ 80 + (features.energy * 0.8 * 70 * 0.5) }}" r="4" fill="#509bf5"/>
+      <!-- Valence point -->
+      <circle cx="{{ 80 - (features.valence * 0.8 * 70 * 0.866) }}" cy="{{ 80 + (features.valence * 0.8 * 70 * 0.5) }}" r="4" fill="#e91e63"/>
+      <!-- Tempo dot (center) -->
+      <circle cx="80" cy="80" r="3" fill="#ff9800"/>
+    </svg>
+
+    <!-- Feature bars -->
+    <div class="radar-labels">
+      {% set dance_pct = (features.danceability * 100)|round|int %}
+      {% set energy_pct = (features.energy * 100)|round|int %}
+      {% set valence_pct = (features.valence * 100)|round|int %}
+      <div class="radar-label-row">
+        <span class="radar-label-key">Dance</span>
+        <div class="radar-label-bar"><div class="radar-label-fill" style="width:{{ dance_pct }}%; background: var(--accent);"></div></div>
+        <span class="radar-label-val" style="color:var(--accent);">{{ dance_pct }}%</span>
+      </div>
+      <div class="radar-label-row">
+        <span class="radar-label-key">Energy</span>
+        <div class="radar-label-bar"><div class="radar-label-fill" style="width:{{ energy_pct }}%; background: var(--accent2);"></div></div>
+        <span class="radar-label-val" style="color:var(--accent2);">{{ energy_pct }}%</span>
+      </div>
+      <div class="radar-label-row">
+        <span class="radar-label-key">Valence</span>
+        <div class="radar-label-bar"><div class="radar-label-fill" style="width:{{ valence_pct }}%; background: var(--accent3);"></div></div>
+        <span class="radar-label-val" style="color:var(--accent3);">{{ valence_pct }}%</span>
+      </div>
+      <div class="radar-label-row">
+        <span class="radar-label-key">Avg BPM</span>
+        <div class="radar-label-bar"><div class="radar-label-fill" style="width:{{ (features.tempo / 200 * 100)|round }}%; background: var(--accent4);"></div></div>
+        <span class="radar-label-val" style="color:var(--accent4);">{{ features.tempo }}</span>
+      </div>
+      <p style="font-size:0.58rem; color:#555; margin-top:4px;">* 流派特徵估算</p>
+    </div>
   </div>
 </div>
 
-<!-- Radar Chart + Features (two-column) -->
-<div class="section radar-section" style="padding: 12px 14px;">
-  <!-- Radar -->
-  <div class="radar-chart-wrap">
-    <div class="radar-chart" style="--dance: {{ (features.danceability * 100)|round }}; --energy: {{ (features.energy * 100)|round }}; --valence: {{ (features.valence * 100)|round }};">
-      <div class="radar-bg"></div>
-      <div class="radar-fill"></div>
-      <div class="radar-center"></div>
+<!-- Calendar Heatmap -->
+<h2><span class="icon">🗓️</span> 聆聽日曆 (過去28天)</h2>
+<div class="section" style="padding: 10px 12px;">
+  <div class="calendar-grid">
+    <div class="cal-header">Mon</div><div class="cal-header">Tue</div><div class="cal-header">Wed</div>
+    <div class="cal-header">Thu</div><div class="cal-header">Fri</div><div class="cal-header">Sat</div><div class="cal-header">Sun</div>
+    {% for cell in heatmap %}
+    <div class="cal-cell level-{{ cell.level }}" title="{{ cell.date }}: {{ cell.count }} 首">
+      <span class="day-num">{{ cell.daynum }}</span>
+      {% if cell.count > 0 %}
+      <span class="day-count">{{ cell.count }}</span>
+      {% endif %}
     </div>
-    <div style="font-size:0.68rem; color: var(--muted);">流派的聆聽特徵</div>
+    {% endfor %}
   </div>
-
-  <!-- Feature bars -->
-  <div style="display:flex; flex-direction:column; gap:8px; justify-content:center;">
-    <div style="font-size:0.75rem; color: var(--muted); margin-bottom:2px;">📊 特徵分析</div>
-    <div style="display:flex; align-items:center; gap:8px;">
-      <span style="font-size:0.68rem; width:80px; color: var(--muted);">Dance</span>
-      <div style="flex:1; height:6px; background:#333; border-radius:3px; overflow:hidden;">
-        <div style="height:100%; width:{{ (features.danceability * 100)|round }}%; background:var(--accent); border-radius:3px;"></div>
-      </div>
-      <span style="font-size:0.68rem; color:var(--accent); width:32px; text-align:right;">{{ (features.danceability * 100)|round }}%</span>
-    </div>
-    <div style="display:flex; align-items:center; gap:8px;">
-      <span style="font-size:0.68rem; width:80px; color: var(--muted);">Energy</span>
-      <div style="flex:1; height:6px; background:#333; border-radius:3px; overflow:hidden;">
-        <div style="height:100%; width:{{ (features.energy * 100)|round }}%; background:var(--accent2); border-radius:3px;"></div>
-      </div>
-      <span style="font-size:0.68rem; color:var(--accent2); width:32px; text-align:right;">{{ (features.energy * 100)|round }}%</span>
-    </div>
-    <div style="display:flex; align-items:center; gap:8px;">
-      <span style="font-size:0.68rem; width:80px; color: var(--muted);">Valence</span>
-      <div style="flex:1; height:6px; background:#333; border-radius:3px; overflow:hidden;">
-        <div style="height:100%; width:{{ (features.valence * 100)|round }}%; background:var(--accent3); border-radius:3px;"></div>
-      </div>
-      <span style="font-size:0.68rem; color:var(--accent3); width:32px; text-align:right;">{{ (features.valence * 100)|round }}%</span>
-    </div>
-    <div style="display:flex; align-items:center; gap:8px;">
-      <span style="font-size:0.68rem; width:80px; color: var(--muted);">Avg BPM</span>
-      <div style="flex:1; height:6px; background:#333; border-radius:3px; overflow:hidden;">
-        <div style="height:100%; width:{{ (features.tempo / 200 * 100)|round }}%; background:var(--accent4); border-radius:3px;"></div>
-      </div>
-      <span style="font-size:0.68rem; color:var(--accent4); width:32px; text-align:right;">{{ features.tempo }}</span>
-    </div>
-    <div style="font-size:0.6rem; color:#555; margin-top:2px;">* 來自流派特徵估算</div>
-  </div>
+  <p style="font-size:0.58rem; color:#555; margin-top:8px;">深色 = 更多播放</p>
 </div>
 
 <!-- Mood Timeline -->
 {% if mood_data and mood_data|length > 0 %}
 <h2><span class="icon">🧠</span> Mood Timeline</h2>
-<div class="section" style="padding: 12px 14px;">
+<div class="section" style="padding: 10px;">
   <div class="mood-grid">
     {% for mood in mood_data[:6] %}
     <div class="mood-card">
       <div class="mood-emoji">{{ mood.emoji }}</div>
       <div class="mood-label">{{ mood.label }}</div>
       <div class="mood-icon">{{ mood.icon }}</div>
-      <div class="mood-bar-bg">
-        <div class="mood-bar-fill" style="width: {{ mood.pct }}%;"></div>
-      </div>
+      <div class="mood-bar-bg"><div class="mood-bar-fill" style="width: {{ mood.pct }}%;"></div></div>
     </div>
     {% endfor %}
   </div>
 </div>
 {% endif %}
 
-<!-- Two-column: Decade + Listening Time -->
-<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+<!-- Compare Ranges: Decade + Time (side by side) -->
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
   <div class="section">
-    <h2 style="margin-top:0; font-size:0.88rem;"><span class="icon">📅</span> 年代分佈</h2>
-    <div class="decade-bar-chart">
-      {% for decade, count in top_decades %}
-      <div class="decade-row">
-        <div class="decade-label">{{ decade }}</div>
-        <div class="decade-bar-bg">
-          <div class="decade-bar-fill" style="width: {{ (count / 50 * 100)|round }}%;"></div>
-        </div>
-        <div class="decade-count">{{ count }}</div>
-      </div>
-      {% endfor %}
+    <h2 style="margin-top:0; font-size:0.85rem;"><span class="icon">📅</span> 年代分佈</h2>
+    {% for decade, count in top_decades %}
+    <div class="decade-row">
+      <div class="decade-label">{{ decade }}</div>
+      <div class="decade-bar-bg"><div class="decade-bar-fill" style="width: {{ (count / 50 * 100)|round }}%;"></div></div>
+      <div class="decade-count">{{ count }}</div>
     </div>
+    {% endfor %}
   </div>
+  <div class="section">
+    <h2 style="margin-top:0; font-size:0.85rem;"><span class="icon">🕐</span> 聆聽時段</h2>
+    {% for label, count in sorted_hours %}
+    {% if count > 0 %}
+    <div class="time-row">
+      <div class="time-label">{{ label }}</div>
+      <div class="time-bar-bg"><div class="time-bar-fill" style="width: {{ (count / 50 * 100)|round }}%;"></div></div>
+      <div class="time-count">{{ count }}</div>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
 
-  <div class="section">
-    <h2 style="margin-top:0; font-size:0.88rem;"><span class="icon">🕐</span> 聆聽時段</h2>
-    <div class="time-chart">
-      {% for label, count in sorted_hours %}
-      {% if count > 0 %}
-      <div class="time-row">
-        <div class="time-label">{{ label }}</div>
-        <div class="time-bar-bg">
-          <div class="time-bar-fill" style="width: {{ (count / 50 * 100)|round }}%;"></div>
-        </div>
-        <div class="time-count">{{ count }}</div>
-      </div>
-      {% endif %}
-      {% endfor %}
-    </div>
-  </div>
+<!-- Genre Shifts (Compare Ranges API loaded via JS) -->
+<h2><span class="icon">📈</span> 品味變化 — Rising vs Declining</h2>
+<div id="compare-ranges" class="section" style="padding: 10px 12px;">
+  <div style="display:flex; justify-content:center; align-items:center; height:60px; color:var(--muted); font-size:0.8rem;">載入中...</div>
 </div>
 
 <!-- Signal / Noise -->
 {% if signal_tracks or noise_tracks %}
 <h2><span class="icon">📡</span> Signal / Noise</h2>
-<div class="section" style="padding: 12px 14px;">
-  <div class="signal-noise-grid">
+<div class="section" style="padding: 10px 12px;">
+  <div class="sn-grid">
     {% if signal_tracks %}
-    <div class="sn-section">
+    <div class="sn-col">
       <h3 class="gem">💎 Hidden Gems</h3>
-      <div class="sn-list">
-        {% for track in signal_tracks[:4] %}
-        <div class="sn-item">
-          {% set s_album = track['album'] %}
-          {% if s_album and s_album['images'] and s_album['images']|length > 0 %}
-          <img src="{{ s_album['images'][-1]['url'] }}" alt="{{ track['name'] }}">
-          {% endif %}
-          <div class="sn-info">
-            <div class="sn-name">{{ track['name'] }}</div>
-            <div class="sn-artist">{% for a in track['artists'] %}{{ a['name'] }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
-          </div>
-          <span class="sn-badge gem">💎</span>
+      {% for track in signal_tracks[:4] %}
+      <div class="sn-item">
+        {% set s_album = track['album'] %}
+        {% if s_album and s_album['images'] and s_album['images']|length > 0 %}
+        <img src="{{ s_album['images'][-1]['url'] }}" alt="{{ track['name'] }}">
+        {% endif %}
+        <div class="sn-info">
+          <div class="sn-name">{{ track['name'] }}</div>
+          <div class="sn-artist">{% for a in track['artists'] %}{{ a['name'] }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
         </div>
-        {% endfor %}
+        <span class="sn-badge gem">💎</span>
       </div>
-      <p style="font-size:0.62rem; color:#555; margin-top:6px;">低流行度但高契合度 — 你的私藏寶藏</p>
+      {% endfor %}
     </div>
     {% endif %}
-
     {% if noise_tracks %}
-    <div class="sn-section">
+    <div class="sn-col">
       <h3 class="noise">📢 Overplayed</h3>
-      <div class="sn-list">
-        {% for track in noise_tracks[:4] %}
-        <div class="sn-item">
-          {% set n_album = track['album'] %}
-          {% if n_album and n_album['images'] and n_album['images']|length > 0 %}
-          <img src="{{ n_album['images'][-1]['url'] }}" alt="{{ track['name'] }}">
-          {% endif %}
-          <div class="sn-info">
-            <div class="sn-name">{{ track['name'] }}</div>
-            <div class="sn-artist">{% for a in track['artists'] %}{{ a['name'] }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
-          </div>
-          <span class="sn-badge noise">📢</span>
+      {% for track in noise_tracks[:4] %}
+      <div class="sn-item">
+        {% set n_album = track['album'] %}
+        {% if n_album and n_album['images'] and n_album['images']|length > 0 %}
+        <img src="{{ n_album['images'][-1]['url'] }}" alt="{{ track['name'] }}">
+        {% endif %}
+        <div class="sn-info">
+          <div class="sn-name">{{ track['name'] }}</div>
+          <div class="sn-artist">{% for a in track['artists'] %}{{ a['name'] }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
         </div>
-        {% endfor %}
+        <span class="sn-badge noise">📢</span>
       </div>
-      <p style="font-size:0.62rem; color:#555; margin-top:6px;">高流行度 — 可能係主流洗腦歌</p>
+      {% endfor %}
     </div>
     {% endif %}
   </div>
 </div>
 {% endif %}
 
+<!-- Top Collaborators -->
+{% if top_collab and top_collab|length > 0 %}
+<h2><span class="icon">🤝</span> Top Collaborators</h2>
+<div class="section" style="padding: 10px 12px;">
+  <div class="collab-grid">
+    {% for c in top_collab[:8] %}
+    <div class="collab-row">
+      <span class="collab-rank">{{ loop.index }}</span>
+      {% if c.images and c.images|length > 0 %}
+      <img class="collab-avatar" src="{{ c.images[0]['url'] }}" alt="{{ c.name }}">
+      {% else %}
+      <div class="collab-avatar"></div>
+      {% endif %}
+      <div class="collab-name">{{ c.name }}</div>
+      <div class="collab-bar-bg">
+        <div class="collab-bar-fill" style="width: {{ (c.count / top_collab[0].count * 100)|round }}%;"></div>
+      </div>
+      <span class="collab-count">{{ c.count }}曲</span>
+    </div>
+    {% endfor %}
+  </div>
+  <p style="font-size:0.58rem; color:#555; margin-top:6px;">你的 Top 50 Tracks 中出現次數最多的 Artists</p>
+</div>
+{% endif %}
+
 <!-- Genre Distribution -->
 <h2><span class="icon">🏷️</span> 流派分佈</h2>
-<div class="section" style="padding:10px 14px;">
+<div class="section" style="padding: 8px 12px;">
   <div class="genre-chart">
     {% for genre, count in top_genres %}
     <div class="genre-tag">
@@ -450,34 +497,29 @@
 
 <!-- Genre Explorer -->
 <h2><span class="icon">🔭</span> Genre Explorer</h2>
-<div class="section" style="padding:10px 14px;">
+<div class="section" style="padding: 8px 12px;">
   {% if discovery_genres and discovery_genres|length > 0 %}
   <div class="genre-chart">
     {% for genre, count in discovery_genres %}
     <div class="genre-tag" style="background: linear-gradient(135deg, #1e3a1e, #1a2a1a); border: 1px solid {{ '#1DB954' if count > 5 else '#333' }};">
       <div class="bar" style="width:{{ (count * 3 + 6) }}px; background: linear-gradient(90deg, #1DB954, #509bf5);"></div>
-      <span class="name" style="color: #e0e0e0;">{{ genre }}</span>
-      <span class="count" style="color: #1DB954; font-weight: bold;">×{{ count }}</span>
+      <span class="name" style="color:#e0e0e0;">{{ genre }}</span>
+      <span class="count" style="color:#1DB954; font-weight:bold;">×{{ count }}</span>
     </div>
     {% endfor %}
   </div>
-  <p style="color:#555; font-size:0.68rem; margin-top:8px;">來自 Top Artists 流派統計 · 流派越多說明品味越多元</p>
-  {% else %}
-  <div style="text-align:center; color:var(--muted); font-size:0.8rem; padding:16px;">流派數據取決於 Artist 本身嘅 Spotify 流派標籤</div>
   {% endif %}
 </div>
 
 <!-- Top Artists -->
 <h2><span class="icon">👤</span> Top Artists</h2>
-<div class="section" style="padding:10px 12px;">
+<div class="section" style="padding: 8px 10px;">
   <div class="artists-grid">
     {% for artist in top_artists[:20] %}
     <div class="artist-card">
       {% set a_images = artist['images'] if artist['images'] else [] %}
       {% if a_images and a_images|length > 0 %}
       <img src="{{ a_images[0]['url'] }}" alt="{{ artist['name'] }}" loading="lazy">
-      {% else %}
-      <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23333' width='100' height='100'/><text x='50' y='58' text-anchor='middle' fill='%23666' font-size='36'>?</text></svg>" alt="no image">
       {% endif %}
       <div class="name">{{ artist['name'] }}</div>
       {% set a_genres = artist['genres'] if artist['genres'] else [] %}
@@ -489,7 +531,7 @@
 
 <!-- Top Tracks -->
 <h2><span class="icon">🎧</span> Top Tracks</h2>
-<div class="section" style="padding:10px 12px;">
+<div class="section" style="padding: 8px 10px;">
   <div class="tracks-list">
     {% for track in top_tracks[:30] %}
     <div class="track-item">
@@ -501,7 +543,6 @@
       <div class="track-info">
         <div class="name">{{ track['name'] }}</div>
         <div class="artist">{% for a in track['artists'] %}{{ a['name'] }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
-        <div class="album">{{ t_album['name'] if t_album else '' }}</div>
       </div>
     </div>
     {% endfor %}
@@ -510,7 +551,7 @@
 
 <!-- Recently Played -->
 <h2><span class="icon">⏱️</span> 最近播放</h2>
-<div class="section" style="padding:10px 12px;">
+<div class="section" style="padding: 8px 10px;">
   <div class="recent-list">
     {% for item in recent %}
     <div class="recent-item">
@@ -529,6 +570,94 @@
   </div>
 </div>
 
-<footer>品味分析 v3.0 · Spotify API · Signal/Noise · Mood Timeline · 5分鐘快取</footer>
+<footer>品味分析 v7.0 · Spotify API · Signal/Noise · Calendar Heatmap · Compare Ranges · 5分鐘快取</footer>
+
+<!-- Hidden share text -->
+<textarea id="shareText" style="display:none;">{{ share_text }}</textarea>
+
+<script>
+// ── Compare Ranges Loader ──────────────────────────────
+(function() {
+  fetch('/api/compare-ranges')
+    .then(r => r.json())
+    .then(data => {
+      if (data.error) { document.getElementById('compare-ranges').innerHTML = '<p style="color:#555;font-size:0.8rem;text-align:center;">品味變化數據載入失敗</p>'; return; }
+      const el = document.getElementById('compare-ranges');
+      let html = '<div class="compare-grid">';
+
+      // Rising genres
+      html += '<div class="compare-col">';
+      html += '<h3 class="rising">📈 Rising ↑</h3>';
+      if (data.rising_genres && data.rising_genres.length > 0) {
+        data.rising_genres.forEach(g => {
+          const max = Math.max(g.short, g.medium, g.long);
+          html += '<div class="compare-genre-row">';
+          html += `<span class="compare-genre-name">${g.genre}</span>`;
+          html += `<div class="compare-bar-bg"><div class="compare-bar-fill" style="width:${g.short/max*100}%; background:var(--accent);"></div></div>`;
+          html += `<span class="compare-arrow" style="color:var(--accent);">${g.short}>${g.medium}</span>`;
+          html += '</div>';
+        });
+      } else {
+        html += '<p style="font-size:0.72rem;color:#555;">近4週無明顯上升流派</p>';
+      }
+      html += '</div>';
+
+      // Declining genres
+      html += '<div class="compare-col">';
+      html += '<h3 class="declining">📉 Declining ↓</h3>';
+      if (data.declining_genres && data.declining_genres.length > 0) {
+        data.declining_genres.forEach(g => {
+          const max = Math.max(g.short, g.medium, g.long);
+          html += '<div class="compare-genre-row">';
+          html += `<span class="compare-genre-name">${g.genre}</span>`;
+          html += `<div class="compare-bar-bg"><div class="compare-bar-fill" style="width:${g.long/max*100}%; background:var(--accent3);"></div></div>`;
+          html += `<span class="compare-arrow" style="color:var(--accent3);">${g.long}>${g.medium}</span>`;
+          html += '</div>';
+        });
+      } else {
+        html += '<p style="font-size:0.72rem;color:#555;">無明顯下降流派</p>';
+      }
+      html += '</div></div>';
+      el.innerHTML = html;
+    })
+    .catch(() => {
+      document.getElementById('compare-ranges').innerHTML = '<p style="color:#555;font-size:0.8rem;text-align:center;">無法載入品味變化</p>';
+    });
+})();
+
+// ── Copy Share Text ───────────────────────────────────
+function copyShare() {
+  const text = document.getElementById('shareText').value;
+  navigator.clipboard.writeText(text).then(() => {
+    const btns = document.querySelectorAll('.share-btn');
+    btns[0].textContent = '✅ 已複製！';
+    btns[0].classList.add('copied');
+    setTimeout(() => {
+      btns[0].textContent = '📋 複製分享文字';
+      btns[0].classList.remove('copied');
+    }, 2000);
+  }).catch(() => {
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btns = document.querySelectorAll('.share-btn');
+    btns[0].textContent = '✅ 已複製！';
+    setTimeout(() => { btns[0].textContent = '📋 複製分享文字'; }, 2000);
+  });
+}
+
+// ── Refresh Data ──────────────────────────────────────
+function refreshData() {
+  const btn = document.querySelectorAll('.share-btn')[1];
+  btn.textContent = '🔄 刷新中...';
+  // Invalidate cache by forcing a fresh load with cache-bust
+  const range = new URLSearchParams(window.location.search).get('range') || 'medium_term';
+  window.location.href = `/?range=${range}&t=${Date.now()}`;
+}
+</script>
 </body>
 </html>
