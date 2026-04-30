@@ -15,7 +15,7 @@
     --border: #222;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, sans-serif; max-width: 520px; margin: 0 auto; padding: 18px 14px 60px; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, sans-serif; max-width: 520px; margin: 0 auto; padding: 18px 14px 90px; }
 
   /* Header */
   header { margin-bottom: 20px; }
@@ -28,7 +28,7 @@
   .tab:hover { border-color: var(--accent); color: var(--text); }
   .tab.active { background: var(--accent); color: #000; font-weight: 700; border-color: var(--accent); }
 
-  /* Section label */
+  /* Label */
   .lbl { font-size: 0.58rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px; }
 
   /* Profile */
@@ -50,7 +50,6 @@
   .dna-bar-bg { flex: 1; height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
   .dna-bar-fill { height: 100%; border-radius: 4px; transition: width 1.2s ease; }
   .dna-pct { font-size: 0.68rem; color: var(--muted); width: 32px; text-align: right; flex-shrink: 0; }
-  .dna-colors: {'Groove':'#e91e63','Edge':'#ff9800','Chill':'#509bf5','Pop':'#9c27b0','Depth':'#4caf50'}
 
   /* Decade breakdown */
   .decade-strip { display: flex; flex-direction: column; gap: 4px; background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
@@ -61,34 +60,13 @@
   .dec-count { font-size: 0.65rem; color: var(--accent); width: 20px; text-align: right; flex-shrink: 0; }
   .dec-age { font-size: 0.6rem; color: var(--muted); width: 40px; text-align: right; flex-shrink: 0; }
 
-  /* Artist connections web */
-  .conn-section { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 12px; }
-  .conn-web { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
-  .conn-node {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 6px 4px;
-    text-align: center;
-    position: relative;
-  }
-  .conn-node img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: var(--bg); display: block; margin: 0 auto 3px; }
-  .conn-node .name { font-size: 0.6rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .conn-node .links { font-size: 0.5rem; color: var(--muted); }
-  .conn-node.primary { border-color: var(--accent); }
-  .conn-node.primary img { border: 2px solid var(--accent); }
-
-  /* Peak hours */
+  /* Peak Hours */
   .peak-section { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 12px; }
   .peak-title { font-size: 0.72rem; font-weight: 700; margin-bottom: 8px; }
   .peak-peak { font-size: 0.65rem; color: var(--accent); margin-bottom: 8px; }
   .hours-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; }
-  .hour-cell { height: 28px; display: flex; align-items: flex-end; justify-content: center; border-radius: 2px; transition: all 0.2s; cursor: default; }
+  .hour-cell { height: 28px; display: flex; align-items: flex-end; justify-content: center; border-radius: 2px; }
   .hour-cell .h { font-size: 0.48rem; color: var(--muted); text-align: center; line-height: 1; padding-bottom: 1px; }
-  .hours-night { background: rgba(29,185,84,0.05); }
-  .hours-morning { background: rgba(29,185,84,0.15); }
-  .hours-afternoon { background: rgba(29,185,84,0.25); }
-  .hours-evening { background: rgba(29,185,84,0.5); }
 
   /* Heatmap */
   .heat-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
@@ -101,6 +79,16 @@
   .level-3 { background: #1a7a1a; }
   .level-4 { background: var(--accent); }
   .level-4 .d { color: #000; }
+
+  /* Artist connections */
+  .conn-section { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 12px; }
+  .conn-web { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+  .conn-node { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 6px 4px; text-align: center; }
+  .conn-node img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: var(--bg); display: block; margin: 0 auto 3px; }
+  .conn-node .name { font-size: 0.6rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .conn-node .links { font-size: 0.5rem; color: var(--muted); }
+  .conn-node.primary { border-color: var(--accent); }
+  .conn-node.primary img { border: 2px solid var(--accent); }
 
   /* Collab list */
   .collab-section { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 12px; }
@@ -122,20 +110,70 @@
   .sn-name { font-size: 0.7rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sn-artist { font-size: 0.58rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* Tracks */
-  .tracks-section { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 12px; }
-  .track-row { display: flex; align-items: center; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--border); }
-  .track-row:last-child { border-bottom: none; }
-  .track-row:hover { background: var(--bg3); margin: 0 -8px; padding: 5px 8px; border-radius: 6px; }
-  .track-n { font-size: 0.65rem; color: var(--muted); width: 18px; text-align: center; flex-shrink: 0; }
-  .track-row img { width: 32px; height: 32px; border-radius: 4px; background: var(--bg3); flex-shrink: 0; }
-  .track-name { font-size: 0.78rem; font-weight: 600; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .track-artist { font-size: 0.62rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
   /* Genre cloud */
   .genre-cloud { display: flex; flex-wrap: wrap; gap: 4px; background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 12px; }
   .g-tag { background: var(--bg3); border-radius: 20px; padding: 3px 8px; font-size: 0.68rem; display: flex; align-items: center; gap: 3px; }
   .g-tag .bar { height: 4px; background: var(--accent); border-radius: 2px; min-width: 4px; }
+
+  /* Tracks — INTERACTIVE */
+  .tracks-section { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 12px; }
+  .track-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 6px; border-radius: 6px; cursor: pointer;
+    transition: background 0.12s;
+  }
+  .track-row:hover { background: var(--bg3); }
+  .track-row:hover .track-play { opacity: 1; }
+  .track-row:hover .track-name { color: var(--accent); }
+  .track-row .track-n { font-size: 0.65rem; color: var(--muted); width: 18px; text-align: center; flex-shrink: 0; }
+  .track-row img { width: 34px; height: 34px; border-radius: 4px; background: var(--bg3); flex-shrink: 0; }
+  .track-info { flex: 1; min-width: 0; }
+  .track-name { font-size: 0.78rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: color 0.12s; }
+  .track-artist { font-size: 0.62rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .track-play { opacity: 0; transition: opacity 0.15s; font-size: 0.75rem; flex-shrink: 0; padding: 4px; border-radius: 50%; background: var(--accent); color: #000; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; text-decoration: none; flex-shrink: 0; }
+  .track-play:hover { background: #fff; }
+  .track-spotify-link { opacity: 0; transition: opacity 0.15s; flex-shrink: 0; font-size: 0.65rem; color: var(--muted); text-decoration: none; padding: 4px; }
+  .track-row:hover .track-spotify-link { opacity: 1; }
+
+  /* Top Artists — INTERACTIVE */
+  .artists-section { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 12px; }
+  .artists-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+  .artist-card { text-align: center; padding: 8px 4px; border-radius: 10px; cursor: pointer; transition: background 0.12s; text-decoration: none; color: var(--text); }
+  .artist-card:hover { background: var(--bg3); }
+  .artist-card:hover .artist-name { color: var(--accent); }
+  .artist-card img { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; background: var(--bg3); display: block; margin: 0 auto 4px; }
+  .artist-name { font-size: 0.62rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: color 0.12s; }
+  .artist-play { display: none; }
+
+  /* ── Floating Player Bar ── */
+  .player-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #0d0d0d;
+    border-top: 1px solid var(--border);
+    padding: 8px 14px;
+    display: flex; align-items: center; gap: 10px;
+    z-index: 100;
+    max-width: 520px; margin: 0 auto;
+  }
+  .player-album { width: 40px; height: 40px; border-radius: 6px; background: var(--bg3); flex-shrink: 0; object-fit: cover; }
+  .player-info { flex: 1; min-width: 0; }
+  .player-name { font-size: 0.78rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .player-artist { font-size: 0.62rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .player-controls { display: flex; align-items: center; gap: 6px; }
+  .player-btn {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: none; background: var(--bg3); color: var(--text);
+    font-size: 0.85rem; cursor: pointer; display: flex;
+    align-items: center; justify-content: center;
+    transition: all 0.12s; text-decoration: none;
+  }
+  .player-btn:hover { background: var(--accent); color: #000; }
+  .player-btn.play { background: var(--accent); color: #000; width: 36px; height: 36px; }
+  .player-btn.play:hover { background: #fff; }
+  .player-open { font-size: 0.65rem; color: var(--muted); text-decoration: none; padding: 4px 6px; border: 1px solid var(--border); border-radius: 8px; flex-shrink: 0; }
+  .player-open:hover { border-color: var(--accent); color: var(--accent); }
+  .player-status { font-size: 0.6rem; color: var(--muted); text-align: center; flex: 1; }
+  .player-nowrap { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   /* Footer actions */
   .actions { display: flex; gap: 8px; margin-top: 18px; }
@@ -149,6 +187,17 @@
   .profile, .stats, .dna-section, .decade-strip, .conn-section, .peak-section, .collab-section, .sn-section, .tracks-section, .genre-cloud { animation: fade 0.35s ease both; }
   .stats { animation-delay: 0.03s; }
   .dna-section { animation-delay: 0.06s; }
+
+  /* Toast notification */
+  .toast {
+    position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%);
+    background: var(--accent); color: #000;
+    padding: 6px 14px; border-radius: 20px;
+    font-size: 0.72rem; font-weight: 600;
+    opacity: 0; transition: opacity 0.3s;
+    pointer-events: none; z-index: 200;
+  }
+  .toast.show { opacity: 1; }
 </style>
 </head>
 <body>
@@ -200,13 +249,11 @@
 <!-- Decade Breakdown -->
 {% if decade_data and decade_data|length > 0 %}
 <div class="decade-strip">
-  <div class="lbl">Decade Breakdown · 音樂年代</div>
+  <div class="lbl">Decade Breakdown</div>
   {% for d in decade_data[:6] %}
   <div class="dec-row">
     <span class="dec-label">{{ d.label }}</span>
-    <div class="dec-bar-bg">
-      <div class="dec-bar-fill" style="width: {{ (d.count / decade_data[0].count * 100)|round }}%;"></div>
-    </div>
+    <div class="dec-bar-bg"><div class="dec-bar-fill" style="width: {{ (d.count / decade_data[0].count * 100)|round }}%;"></div></div>
     <span class="dec-count">{{ d.count }}</span>
     <span class="dec-age">{{ d.age }}年前</span>
   </div>
@@ -217,26 +264,19 @@
 <!-- Peak Hours -->
 {% if hours_data and hours_data|length > 0 %}
 <div class="peak-section">
-  <div class="peak-title">⏰ Peak Hours · 黃金時段</div>
+  <div class="peak-title">⏰ Peak Hours</div>
   {% if peak_label %}<div class="peak-peak">最活躍：{{ peak_label }}</div>{% endif %}
   <div class="hours-grid">
     {% for h in hours_data[:24] %}
-    {% if h.hour >= 0 and h.hour < 6 %}
-    {% set cls = 'hours-night' %}
-    {% elif h.hour >= 6 and h.hour < 12 %}
-    {% set cls = 'hours-morning' %}
-    {% elif h.hour >= 12 and h.hour < 18 %}
-    {% set cls = 'hours-afternoon' %}
-    {% else %}
-    {% set cls = 'hours-evening' %}
+    {% if h.hour >= 0 and h.hour < 6 %}{% set cls = 'hours-night' %}{% set op = 0.1 %}
+    {% elif h.hour >= 6 and h.hour < 12 %}{% set cls = 'hours-morning' %}{% set op = 0.3 %}
+    {% elif h.hour >= 12 and h.hour < 18 %}{% set cls = 'hours-afternoon' %}{% set op = 0.5 %}
+    {% else %}{% set cls = 'hours-evening' %}{% set op = 0.7 %}
     {% endif %}
-    <div class="hour-cell {{ cls }}" style="opacity: {{ h.pct / 100 * 0.8 + 0.1 }};" title="{{ h.label }}: {{ h.count }}首">
+    <div class="hour-cell {{ cls }}" style="opacity: {{ op + (h.pct / 100 * 0.3) }};" title="{{ h.label }}: {{ h.count }}首">
       <span class="h">{{ h.label[:2] }}</span>
     </div>
     {% endfor %}
-  </div>
-  <div style="display:flex; gap:8px; margin-top:6px; font-size:0.55rem; color:var(--muted);">
-    <span>🌙深夜</span><span>🌅早晨</span><span>☀️下午</span><span>🌆傍晚</span>
   </div>
 </div>
 {% endif %}
@@ -256,21 +296,21 @@
   </div>
 </div>
 
-<!-- Artist Connections Web -->
+<!-- Artist Network -->
 {% if artist_conns and artist_conns|length > 0 %}
 <div class="conn-section">
-  <div class="lbl">Artist Network · 你的音樂圈</div>
+  <div class="lbl">Artist Network</div>
   <div class="conn-web">
     {% for a in artist_conns[:12] %}
-    <div class="conn-node {{ 'primary' if loop.index <= 3 else '' }}">
+    <a href="https://open.spotify.com/artist/{{ a.name }}" target="_blank" class="conn-node {{ 'primary' if loop.index <= 3 else '' }}" style="text-decoration:none; color:inherit;">
       {% if a.images and a.images|length > 0 %}
       <img src="{{ a.images[0]['url'] }}" alt="{{ a.name }}">
       {% else %}
       <div style="width:40px;height:40px;border-radius:50%;background:var(--bg);margin:0 auto 3px;"></div>
       {% endif %}
       <div class="name">{{ a.name }}</div>
-      <div class="links">{{ a.connected_to|length }} connections</div>
-    </div>
+      <div class="links">{{ a.connected_to|length }} links</div>
+    </a>
     {% endfor %}
   </div>
 </div>
@@ -283,7 +323,7 @@
   <div class="sn-card">
     <div class="sn-title" style="color:var(--accent);">💎 Hidden Gems</div>
     {% for t in signal_tracks[:4] %}
-    <div class="sn-row">
+    <div class="sn-row" style="cursor:pointer;" onclick="playTrack('{{ t.id }}', this)">
       {% set al = t.album %}
       {% if al and al.images and al.images|length > 0 %}
       <img src="{{ al.images[-1]['url'] }}" alt="{{ t.name }}">
@@ -300,7 +340,7 @@
   <div class="sn-card">
     <div class="sn-title" style="color:#e91e63;">📢 Overplayed</div>
     {% for t in noise_tracks[:4] %}
-    <div class="sn-row">
+    <div class="sn-row" style="cursor:pointer;" onclick="playTrack('{{ t.id }}', this)">
       {% set al = t.album %}
       {% if al and al.images and al.images|length > 0 %}
       <img src="{{ al.images[-1]['url'] }}" alt="{{ t.name }}">
@@ -319,7 +359,7 @@
 <!-- Top Collaborators -->
 {% if top_collab and top_collab|length > 0 %}
 <div class="collab-section">
-  <div class="lbl">Top Collaborators · 合作最密的Artist</div>
+  <div class="lbl">Top Collaborators</div>
   {% for c in top_collab[:6] %}
   <div class="collab-row">
     {% if c.images and c.images|length > 0 %}
@@ -343,19 +383,41 @@
   {% endfor %}
 </div>
 
-<!-- Top Tracks -->
+<!-- Top Tracks (INTERACTIVE) -->
 <div class="tracks-section">
-  <div class="lbl">Top Tracks</div>
+  <div class="lbl">Top Tracks · 點擊播放 🎵</div>
   {% for t in top_tracks[:15] %}
-  <div class="track-row">
+  <div class="track-row" data-track-id="{{ t.id }}" data-track-name="{{ t.name }}" data-artist="{% for a in t.artists %}{{ a.name }}{% if not loop.last %}, {% endif %}{% endfor %}">
     <span class="track-n">{{ loop.index }}</span>
     {% set al = t.album %}
     {% if al and al.images and al.images|length > 0 %}
     <img src="{{ al.images[-1]['url'] }}" alt="{{ t.name }}" loading="lazy">
     {% endif %}
-    <div class="track-name">{{ t.name }}</div>
+    <div class="track-info">
+      <div class="track-name">{{ t.name }}</div>
+      <div class="track-artist">{% for a in t.artists %}{{ a.name }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
+    </div>
+    <a href="https://open.spotify.com/track/{{ t.id }}" target="_blank" class="track-spotify-link" title="Open in Spotify">🎧</a>
+    <a href="#" class="track-play" onclick="playTrack('{{ t.id }}', this.parentElement); return false;" title="Play">▶</a>
   </div>
   {% endfor %}
+</div>
+
+<!-- Top Artists (INTERACTIVE) -->
+<div class="artists-section">
+  <div class="lbl">Top Artists · 點擊播放</div>
+  <div class="artists-grid">
+    {% for a in top_artists[:12] %}
+    <a href="https://open.spotify.com/artist/{{ a.id }}" target="_blank" class="artist-card" title="{{ a.name }}">
+      {% if a.images and a.images|length > 0 %}
+      <img src="{{ a.images[0]['url'] }}" alt="{{ a.name }}" loading="lazy">
+      {% else %}
+      <div style="width:52px;height:52px;border-radius:50%;background:var(--bg3);margin:0 auto 4px;"></div>
+      {% endif %}
+      <div class="artist-name">{{ a.name }}</div>
+    </a>
+    {% endfor %}
+  </div>
 </div>
 
 <!-- Actions -->
@@ -366,14 +428,125 @@
 
 <footer>Taste DNA v9 · Spotify</footer>
 
+<!-- Floating Player Bar -->
+<div class="player-bar" id="playerBar">
+  {% if top_tracks and top_tracks|length > 0 %}
+  {% set first = top_tracks[0] %}
+  {% set first_album = first.album %}
+  <img class="player-album" src="{{ first_album.images[-1]['url'] if first_album and first_album.images and first_album.images|length > 0 else '' }}" alt="album">
+  <div class="player-info">
+    <div class="player-name player-nowrap">{{ first.name }}</div>
+    <div class="player-artist player-nowrap">{% for a in first.artists %}{{ a.name }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
+  </div>
+  {% endif %}
+  <div class="player-controls">
+    <button class="player-btn" onclick="playerPrev()" title="上一首">⏮</button>
+    <button class="player-btn play" onclick="playerToggle()" id="playPauseBtn" title="播放/暫停">▶</button>
+    <button class="player-btn" onclick="playerNext()" title="下一首">⏭</button>
+  </div>
+  <a href="https://open.spotify.com" target="_blank" class="player-open" title="Open Spotify">Spotify</a>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
 <textarea id="shareText" style="display:none;">{{ share }}</textarea>
+
 <script>
+// ── Player State ────────────────────────────────────
+let playerState = { is_playing: false, current_track: null };
+
+async function playerToggle() {
+  const action = playerState.is_playing ? 'pause' : 'play';
+  const r = await fetch(`/api/player`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action }) });
+  if (r.ok) {
+    playerState.is_playing = !playerState.is_playing;
+    updatePlayBtn();
+  }
+}
+
+async function playerNext() {
+  await fetch(`/api/player?action=next`, { method: 'POST' });
+  showToast('⏭ 下一首');
+}
+
+async function playerPrev() {
+  await fetch(`/api/player?action=previous`, { method: 'POST' });
+  showToast('⏮ 上一首');
+}
+
+function updatePlayBtn() {
+  const btn = document.getElementById('playPauseBtn');
+  if (btn) btn.textContent = playerState.is_playing ? '⏸' : '▶';
+}
+
+// ── Play Track ────────────────────────────────────────
+async function playTrack(trackId, rowEl) {
+  showToast('🎵 播放中...');
+  try {
+    const r = await fetch(`/api/play-track/${trackId}`, { method: 'POST' });
+    const data = await r.json();
+    if (!r.ok) {
+      showToast(data.error ? '❌ ' + (data.error.includes('No active') ? '需要打開 Spotify' : '播放失敗') : '❌ 播放失敗');
+      // Fallback: open in Spotify
+      window.open(`https://open.spotify.com/track/${trackId}`, '_blank');
+      return;
+    }
+    // Update player bar
+    if (rowEl) {
+      const name = rowEl.dataset.trackName;
+      const artist = rowEl.dataset.artist;
+      const img = rowEl.querySelector('img');
+      document.querySelector('.player-name').textContent = name;
+      document.querySelector('.player-artist').textContent = artist;
+      if (img) document.querySelector('.player-album').src = img.src;
+    }
+    playerState.is_playing = true;
+    updatePlayBtn();
+    showToast('▶ 播放中');
+  } catch(e) {
+    // Fallback: open in Spotify
+    window.open(`https://open.spotify.com/track/${trackId}`, '_blank');
+    showToast('🎧 已打開 Spotify');
+  }
+}
+
+// ── Check currently playing on load ───────────────────
+(async () => {
+  try {
+    const r = await fetch('/api/player');
+    if (r.ok) {
+      const data = await r.json();
+      if (data.is_playing !== undefined) {
+        playerState.is_playing = data.is_playing;
+        updatePlayBtn();
+      }
+    }
+  } catch(e) {}
+})();
+
+// ── Toast ─────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ── Share ─────────────────────────────────────────────
 function copyShare() {
   const t = document.getElementById('shareText').value;
   navigator.clipboard.writeText(t).then(() => {
-    const b = document.querySelector('.action-btn.primary');
-    b.textContent = '✅ 已複製';
-    setTimeout(() => b.textContent = '📋 複製', 1800);
+    showToast('✅ 已複製');
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = t;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('✅ 已複製');
   });
 }
 </script>

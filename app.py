@@ -356,9 +356,96 @@ def api_refresh():
     try:
         t = read_tokens()
         nt = refresh_access_token(t['client_id'], t['client_secret'], t['refresh_token'])
-        return jsonify({'success':True,'token':nt[:20]+'...'})
+        return jsonify({'success': True, 'token': nt[:20]+'...'})
     except Exception as e:
-        return jsonify({'error':str(e)}), 500
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/player', methods=['GET', 'POST', 'PUT'])
+def player_control():
+    """Control Spotify playback: GET current track, PUT play/pause, POST next/prev"""
+    try:
+        token = get_access_token()
+        method = request.method
+
+        if method == 'GET':
+            # Get currently playing
+            req = urllib.request.Request(
+                'https://api.spotify.com/v1/me/player/currently-playing',
+                headers={'Authorization': f'Bearer {token}'}
+            )
+            try:
+                with urllib.request.urlopen(req, timeout=8) as r:
+                    if r.status == 200:
+                        data = json.loads(r.read())
+                        return jsonify(data)
+            except Exception:
+                pass
+            return jsonify({'is_playing': False}), 200
+
+        elif method == 'PUT':
+            # Play or pause
+            action = request.args.get('action', 'play')  # play or pause
+            req = urllib.request.Request(
+                f'https://api.spotify.com/v1/me/player/{action}',
+                data=b'',
+                headers={'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'},
+                method='PUT'
+            )
+            try:
+                with urllib.request.urlopen(req, timeout=8) as r:
+                    return jsonify({'success': True}), r.status or 200
+            except urllib.error.HTTPError as e:
+                return jsonify({'error': e.read().decode()}), e.code
+
+        elif method == 'POST':
+            # Next or previous
+            action = request.args.get('action', 'next')  # next or previous
+            req = urllib.request.Request(
+                f'https://api.spotify.com/v1/me/player/{action}',
+                data=b'',
+                headers={'Authorization': f'Bearer {token}'},
+                method='POST'
+            )
+            try:
+                with urllib.request.urlopen(req, timeout=8) as r:
+                    return jsonify({'success': True}), r.status or 200
+            except urllib.error.HTTPError as e:
+                return jsonify({'error': e.read().decode()}), e.code
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/play-track/<track_id>')
+def play_track(track_id):
+    """Play a specific track on user's active device"""
+    try:
+        token = get_access_token()
+        # First get user's available devices
+        req = urllib.request.Request(
+            'https://api.spotify.com/v1/me/player/devices',
+            headers={'Authorization': f'Bearer {token}'}
+        )
+        with urllib.request.urlopen(req, timeout=10) as r:
+            devices = json.loads(r.read())
+        active = [d for d in devices.get('devices', []) if d.get('is_active')]
+        if not active:
+            return jsonify({'error': 'No active device. Open Spotify on your phone/computer first.', 'devices': devices.get('devices', [])}), 400
+        device_id = active[0]['id']
+        # Play this track
+        req2 = urllib.request.Request(
+            f'https://api.spotify.com/v1/me/player/play?device_id={device_id}',
+            data=json.dumps({'uris': [f'spotify:track:{track_id}']}).encode(),
+            headers={'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'},
+            method='PUT'
+        )
+        try:
+            with urllib.request.urlopen(req2, timeout=10) as r:
+                return jsonify({'success': True, 'track_id': track_id}), 200
+        except urllib.error.HTTPError as e:
+            err = e.read().decode()
+            return jsonify({'error': err}), e.code
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
