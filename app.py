@@ -120,15 +120,13 @@ def index():
                 else:              hour_buckets['Night (0-6)'] += 1
         sorted_hours = sorted(hour_buckets.items(), key=lambda x: x[1], reverse=True)
 
-        # ── Discovery Radar (Recommendations) ────────────────
-        top_artist_ids = [a['id'] for a in top_artists['items'][:5]]
-        top_genre_list = [g for g, c in sorted_genres[:5]]
-        discovery_tracks = []
-        if top_artist_ids:
-            seed_str = ','.join(top_artist_ids[:2])
+        # ── Discovery Radar (Related Artists) ───────────────────
+        discovery_artists = []
+        if top_artists['items']:
             try:
-                recs = api_get(f'https://api.spotify.com/v1/recommendations?seed_artists={seed_str}&limit=8&market=HK')
-                discovery_tracks = recs.get('tracks', [])[:8]
+                top_id = top_artists['items'][0]['id']
+                related = api_get(f'https://api.spotify.com/v1/artists/{top_id}/related-artists')
+                discovery_artists = related.get('artists', [])[:8]
             except Exception:
                 pass
 
@@ -152,7 +150,7 @@ def index():
             features=features,
             time_range=time_range,
             sorted_hours=sorted_hours,
-            discovery_tracks=discovery_tracks,
+            discovery_artists=discovery_artists,
             stats={
                 'explicit': explicit_count,
                 'popularity': avg_popularity,
@@ -182,24 +180,34 @@ def api_recent():
 
 @app.route('/api/discovery')
 def api_discovery():
-    """Get personalized recommendations based on top artists."""
+    """Get related artists based on user's top artists."""
     try:
-        # Get top artists and their genres
-        top_artists = api_get('https://api.spotify.com/v1/me/top/artists?limit=10')
-        genre_count = {}
-        for a in top_artists['items']:
-            for g in a.get('genres', []):
-                genre_count[g] = genre_count.get(g, 0) + 1
-        top_g = sorted(genre_count.items(), key=lambda x: x[1], reverse=True)
-        genre_seeds = ','.join([urllib.parse.quote(g) for g, c in top_g[:3]])
-        artist_ids = [a['id'] for a in top_artists['items'][:3]]
-        artist_seeds = ','.join(artist_ids[:1])  # Use only 1 artist seed
+        # Get top artists
+        top_artists = api_get('https://api.spotify.com/v1/me/top/artists?limit=5')
+        if not top_artists['items']:
+            return jsonify([])
 
-        # Try with artist seed + genre seed
-        url = f'https://api.spotify.com/v1/recommendations?seed_artists={artist_seeds}&seed_genres={genre_seeds}&limit=10&market=HK'
-        recs = api_get(url)
-        tracks = recs.get('tracks', [])
-        return jsonify(tracks)
+        # Pick the top artist and get related artists
+        top_id = top_artists['items'][0]['id']
+        related = api_get(f'https://api.spotify.com/v1/artists/{top_id}/related-artists')
+        related_artists = related.get('artists', [])[:8]
+
+        # Get 1 popular track from each related artist for preview
+        discovery = []
+        for artist in related_artists[:6]:
+            artist_name = artist['name']
+            genres = artist.get('genres', [])[:2]
+            images = artist.get('images', [])
+            img_url = images[0]['url'] if images else None
+            discovery.append({
+                'name': artist_name,
+                'genres': genres,
+                'images': [{'url': img_url}] if img_url else [],
+                'popularity': artist.get('popularity', 0),
+                'type': 'artist'
+            })
+
+        return jsonify(discovery)
     except urllib.error.HTTPError as e:
         body = e.read().decode()
         return jsonify({'error': f'HTTP {e.code}', 'detail': body[:200]}), 500
