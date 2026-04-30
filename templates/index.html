@@ -9,23 +9,38 @@
     --bg: #121212;
     --card: #1e1e1e;
     --card2: #252525;
+    --card3: #2a2a2a;
     --accent: #1DB954;
     --accent2: #509bf5;
     --accent3: #e91e63;
+    --accent4: #ff9800;
     --text: #e0e0e0;
     --muted: #888;
     --border: #333;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, sans-serif; padding: 12px; max-width: 840px; margin: 0 auto; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, sans-serif; padding: 12px; max-width: 860px; margin: 0 auto; }
 
   /* ── Header ── */
-  header { text-align: center; padding: 16px 0 8px; }
+  header { text-align: center; padding: 18px 0 10px; }
   h1 { font-size: 1.8rem; color: var(--accent); margin-bottom: 4px; }
-  .subtitle { color: var(--muted); font-size: 0.78rem; margin-bottom: 12px; }
+  .subtitle { color: var(--muted); font-size: 0.78rem; margin-bottom: 10px; }
+
+  /* ── Taste Profile Banner ── */
+  .profile-banner {
+    background: linear-gradient(135deg, #1a2a1a 0%, #1e3a1e 50%, #1a2a2a 100%);
+    border: 1px solid #2a4a2a;
+    border-radius: 14px;
+    padding: 16px 20px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .profile-emoji { font-size: 2.2rem; margin-bottom: 6px; }
+  .profile-text { font-size: 1.05rem; font-weight: 600; color: var(--text); }
+  .profile-sub { font-size: 0.72rem; color: var(--muted); margin-top: 4px; }
 
   /* ── Time Range Selector ── */
-  .range-selector { display: flex; justify-content: center; gap: 6px; margin-bottom: 20px; }
+  .range-selector { display: flex; justify-content: center; gap: 6px; margin-bottom: 16px; }
   .range-btn {
     padding: 7px 16px;
     border-radius: 20px;
@@ -41,96 +56,183 @@
   .range-btn.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600; }
 
   /* ── Stats Row ── */
-  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
-  .stat-box { background: var(--card); border-radius: 10px; padding: 12px 8px; text-align: center; }
-  .stat-val { font-size: 1.4rem; font-weight: bold; color: var(--accent); }
+  .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 14px; }
+  .stat-box { background: var(--card); border-radius: 10px; padding: 10px 6px; text-align: center; }
+  .stat-val { font-size: 1.3rem; font-weight: bold; color: var(--accent); }
   .stat-val.secondary { color: var(--accent2); }
-  .stat-label { font-size: 0.65rem; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-val.accent3 { color: var(--accent3); }
+  .stat-val.accent4 { color: var(--accent4); }
+  .stat-label { font-size: 0.6rem; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ── Listening Streak ── */
+  .streak-bar { display: flex; gap: 3px; justify-content: center; margin-top: 6px; }
+  .streak-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
+  .streak-dot.active { background: var(--accent); }
+  .streak-text { font-size: 0.7rem; color: var(--muted); margin-top: 3px; }
 
   /* ── Section ── */
-  h2 { font-size: 1rem; color: var(--text); margin: 24px 0 10px; display: flex; align-items: center; gap: 8px; }
+  h2 { font-size: 0.95rem; color: var(--text); margin: 20px 0 10px; display: flex; align-items: center; gap: 8px; }
   h2 .icon { font-size: 1.1rem; }
-  .section { background: var(--card); border-radius: 12px; padding: 14px; margin-bottom: 14px; }
+  .section { background: var(--card); border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+
+  /* ── Radar Chart (CSS) ── */
+  .radar-section { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .radar-chart-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .radar-chart {
+    position: relative;
+    width: 160px;
+    height: 160px;
+  }
+  .radar-bg {
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    border: 1px solid #333;
+    background: conic-gradient(from 0deg, #1a3a1a 0deg, #1a2a3a 90deg, #2a1a3a 180deg, #3a1a2a 270deg, #1a3a1a 360deg);
+    opacity: 0.3;
+  }
+  .radar-fill {
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(
+      from -90deg,
+      var(--accent) 0deg,
+      var(--accent2) calc(var(--dance, 55) * 3.6deg),
+      var(--accent2) calc(var(--dance, 55) * 3.6deg),
+      var(--accent3) calc(calc(var(--dance, 55) + var(--energy, 58)) * 1.8deg),
+      var(--accent3) calc(calc(var(--dance, 55) + var(--energy, 58)) * 1.8deg),
+      var(--accent4) calc(calc(var(--dance, 55) + var(--energy, 58) + var(--valence, 50)) * 1.8deg),
+      var(--accent4) calc(calc(var(--dance, 55) + var(--energy, 58) + var(--valence, 50)) * 1.8deg),
+      var(--accent) calc(calc(var(--dance, 55) + var(--energy, 58) + var(--valence, 50)) * 1.8deg)
+    );
+    opacity: 0.55;
+    animation: radar-spin 20s linear infinite;
+  }
+  @keyframes radar-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .radar-center { position: absolute; inset: 40%; border-radius: 50%; background: var(--card); border: 1px solid #333; }
+  .radar-labels { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+  .radar-label-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; }
+  .radar-label-key { color: var(--muted); }
+  .radar-label-val { color: var(--accent); font-weight: 600; }
+  .radar-label-bar { flex: 1; height: 3px; background: var(--card2); margin: 0 8px; border-radius: 2px; overflow: hidden; }
+  .radar-label-fill { height: 100%; border-radius: 2px; }
 
   /* ── Features Grid ── */
-  .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-  .feature-card { background: var(--card2); border-radius: 8px; padding: 10px 6px; text-align: center; }
-  .feature-value { font-size: 1.4rem; font-weight: bold; color: var(--accent); }
-  .feature-label { font-size: 0.65rem; color: var(--muted); margin-top: 2px; }
-  .feature-bar-bg { height: 4px; background: #333; border-radius: 2px; margin-top: 6px; overflow: hidden; }
-  .feature-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; }
+  .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .feature-card { background: var(--card2); border-radius: 8px; padding: 8px 5px; text-align: center; }
+  .feature-value { font-size: 1.2rem; font-weight: bold; }
+  .feature-label { font-size: 0.6rem; color: var(--muted); margin-top: 2px; }
+  .feature-bar-bg { height: 3px; background: #333; border-radius: 2px; margin-top: 5px; overflow: hidden; }
+  .feature-bar-fill { height: 100%; border-radius: 2px; }
+
+  /* ── Mood Timeline ── */
+  .mood-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 6px; }
+  .mood-card {
+    background: var(--card2);
+    border-radius: 8px;
+    padding: 10px 8px;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+  .mood-card:hover { transform: translateY(-2px); }
+  .mood-emoji { font-size: 1.5rem; }
+  .mood-label { font-size: 0.72rem; font-weight: 600; margin-top: 3px; }
+  .mood-icon { font-size: 0.62rem; color: var(--muted); }
+  .mood-bar-bg { height: 3px; background: #333; border-radius: 2px; margin-top: 5px; overflow: hidden; }
+  .mood-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; }
 
   /* ── Decade Bar ── */
-  .decade-bar-chart { display: flex; flex-direction: column; gap: 6px; }
+  .decade-bar-chart { display: flex; flex-direction: column; gap: 5px; }
   .decade-row { display: flex; align-items: center; gap: 8px; }
-  .decade-label { font-size: 0.75rem; width: 90px; color: var(--muted); flex-shrink: 0; }
-  .decade-bar-bg { flex: 1; height: 16px; background: var(--card2); border-radius: 4px; overflow: hidden; }
-  .decade-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 4px; transition: width 0.5s; }
-  .decade-count { font-size: 0.75rem; width: 24px; text-align: right; color: var(--accent); flex-shrink: 0; }
+  .decade-label { font-size: 0.72rem; width: 80px; color: var(--muted); flex-shrink: 0; }
+  .decade-bar-bg { flex: 1; height: 14px; background: var(--card2); border-radius: 4px; overflow: hidden; }
+  .decade-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 4px; transition: width 0.6s ease; }
+  .decade-count { font-size: 0.7rem; width: 22px; text-align: right; color: var(--accent); flex-shrink: 0; }
 
   /* ── Listening Time ── */
-  .time-chart { display: flex; flex-direction: column; gap: 6px; }
+  .time-chart { display: flex; flex-direction: column; gap: 5px; }
   .time-row { display: flex; align-items: center; gap: 8px; }
-  .time-label { font-size: 0.75rem; width: 120px; color: var(--muted); flex-shrink: 0; }
-  .time-bar-bg { flex: 1; height: 14px; background: var(--card2); border-radius: 4px; overflow: hidden; }
-  .time-bar-fill { height: 100%; background: var(--accent3); border-radius: 4px; }
-  .time-count { font-size: 0.75rem; width: 24px; text-align: right; color: var(--accent3); flex-shrink: 0; }
+  .time-label { font-size: 0.72rem; width: 110px; color: var(--muted); flex-shrink: 0; }
+  .time-bar-bg { flex: 1; height: 12px; background: var(--card2); border-radius: 4px; overflow: hidden; }
+  .time-bar-fill { height: 100%; background: var(--accent3); border-radius: 4px; transition: width 0.6s ease; }
+  .time-count { font-size: 0.7rem; width: 22px; text-align: right; color: var(--accent3); flex-shrink: 0; }
 
   /* ── Genre Tags ── */
-  .genre-chart { display: flex; flex-wrap: wrap; gap: 6px; }
-  .genre-tag { background: var(--card2); border-radius: 20px; padding: 5px 10px; font-size: 0.72rem; display: flex; align-items: center; gap: 5px; }
-  .genre-tag .bar { height: 5px; background: var(--accent); border-radius: 3px; min-width: 4px; }
+  .genre-chart { display: flex; flex-wrap: wrap; gap: 5px; }
+  .genre-tag { background: var(--card2); border-radius: 20px; padding: 4px 9px; font-size: 0.7rem; display: flex; align-items: center; gap: 4px; }
+  .genre-tag .bar { height: 4px; background: var(--accent); border-radius: 2px; min-width: 4px; }
   .genre-tag .name { color: var(--text); }
   .genre-tag .count { color: var(--muted); }
 
+  /* ── Signal / Noise ── */
+  .signal-noise-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .sn-section h3 { font-size: 0.8rem; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+  .sn-section h3.gem { color: var(--accent); }
+  .sn-section h3.noise { color: var(--accent3); }
+  .sn-list { display: flex; flex-direction: column; gap: 5px; }
+  .sn-item { display: flex; align-items: center; gap: 8px; padding: 5px; background: var(--card2); border-radius: 6px; }
+  .sn-item img { width: 32px; height: 32px; border-radius: 4px; background: #333; flex-shrink: 0; }
+  .sn-info { flex: 1; min-width: 0; }
+  .sn-name { font-size: 0.78rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sn-artist { font-size: 0.65rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sn-badge { font-size: 0.6rem; padding: 2px 5px; border-radius: 8px; flex-shrink: 0; }
+  .sn-badge.gem { background: #1a3a1a; color: var(--accent); }
+  .sn-badge.noise { background: #3a1a2a; color: var(--accent3); }
+
   /* ── Artists Grid ── */
-  .artists-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
-  .artist-card { background: var(--card2); border-radius: 8px; padding: 10px; text-align: center; }
-  .artist-card img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; margin-bottom: 6px; background: #333; }
-  .artist-card .name { font-size: 0.8rem; font-weight: 600; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .artist-card .genres { font-size: 0.65rem; color: var(--muted); line-height: 1.3; }
+  .artists-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
+  .artist-card { background: var(--card2); border-radius: 8px; padding: 8px; text-align: center; }
+  .artist-card img { width: 68px; height: 68px; border-radius: 50%; object-fit: cover; margin-bottom: 5px; background: #333; }
+  .artist-card .name { font-size: 0.75rem; font-weight: 600; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .artist-card .genres { font-size: 0.6rem; color: var(--muted); line-height: 1.3; }
 
   /* ── Tracks List ── */
-  .tracks-list { display: flex; flex-direction: column; gap: 6px; }
-  .track-item { display: flex; align-items: center; gap: 10px; padding: 7px; background: var(--card2); border-radius: 8px; }
-  .track-item img { width: 40px; height: 40px; border-radius: 4px; background: #333; flex-shrink: 0; }
+  .tracks-list { display: flex; flex-direction: column; gap: 5px; }
+  .track-item { display: flex; align-items: center; gap: 9px; padding: 6px; background: var(--card2); border-radius: 8px; transition: background 0.15s; }
+  .track-item:hover { background: var(--card3); }
+  .track-item img { width: 38px; height: 38px; border-radius: 4px; background: #333; flex-shrink: 0; }
   .track-info { flex: 1; min-width: 0; }
-  .track-info .name { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .track-info .artist { font-size: 0.7rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .track-info .album { font-size: 0.65rem; color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .track-rank { font-size: 1rem; color: var(--accent); font-weight: bold; width: 24px; text-align: center; flex-shrink: 0; }
-
-  /* ── Discovery Radar ── */
-  .discovery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
-  .discovery-card { background: var(--card2); border-radius: 8px; padding: 10px; }
-  .discovery-card img { width: 100%; aspect-ratio: 1; border-radius: 6px; background: #333; object-fit: cover; margin-bottom: 6px; }
-  .discovery-card .name { font-size: 0.8rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .discovery-card .artist { font-size: 0.7rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .discovery-card .album { font-size: 0.65rem; color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .discovery-card .badge { display: inline-block; background: var(--accent); color: #000; font-size: 0.6rem; padding: 2px 6px; border-radius: 10px; margin-top: 4px; font-weight: 600; }
-  .discovery-empty { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 20px; }
+  .track-info .name { font-size: 0.82rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .track-info .artist { font-size: 0.68rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .track-info .album { font-size: 0.62rem; color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .track-rank { font-size: 0.9rem; color: var(--accent); font-weight: bold; width: 22px; text-align: center; flex-shrink: 0; }
 
   /* ── Recent ── */
-  .recent-list { display: flex; flex-direction: column; gap: 5px; }
-  .recent-item { display: flex; align-items: center; gap: 10px; font-size: 0.82rem; padding: 5px; border-radius: 6px; }
+  .recent-list { display: flex; flex-direction: column; gap: 4px; }
+  .recent-item { display: flex; align-items: center; gap: 9px; font-size: 0.8rem; padding: 5px; border-radius: 6px; transition: background 0.15s; }
   .recent-item:hover { background: var(--card2); }
-  .recent-item img { width: 34px; height: 34px; border-radius: 4px; background: #333; flex-shrink: 0; }
+  .recent-item img { width: 32px; height: 32px; border-radius: 4px; background: #333; flex-shrink: 0; }
   .recent-item .r-info { flex: 1; min-width: 0; }
   .recent-item .r-name { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .recent-item .r-artist { font-size: 0.7rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .recent-item .r-time { font-size: 0.65rem; color: #555; flex-shrink: 0; }
+  .recent-item .r-artist { font-size: 0.68rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .recent-item .r-time { font-size: 0.62rem; color: #555; flex-shrink: 0; }
 
   /* ── Footer ── */
-  footer { text-align: center; color: #444; font-size: 0.65rem; margin-top: 24px; padding: 12px; }
+  footer { text-align: center; color: #444; font-size: 0.62rem; margin-top: 20px; padding: 12px; }
+
+  /* ── Animations ── */
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .section, .stats-row, .profile-banner { animation: fade-up 0.5s ease both; }
+  .stats-row  { animation-delay: 0.05s; }
+  .section:nth-child(2) { animation-delay: 0.1s; }
+  .section:nth-child(3) { animation-delay: 0.15s; }
+  .section:nth-child(4) { animation-delay: 0.2s; }
 
   /* ── Mobile ── */
-  @media (max-width: 500px) {
-    .stats-row { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 600px) {
+    .stats-row { grid-template-columns: repeat(3, 1fr); }
     .features-grid { grid-template-columns: repeat(2, 1fr); }
-    .artists-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
-    .artist-card img { width: 56px; height: 56px; }
-    .discovery-grid { grid-template-columns: repeat(2, 1fr); }
-    h2 { font-size: 0.9rem; }
+    .artists-grid { grid-template-columns: repeat(3, 1fr); gap: 5px; }
+    .artist-card img { width: 54px; height: 54px; }
+    .radar-section { grid-template-columns: 1fr; }
+    .signal-noise-grid { grid-template-columns: 1fr; }
+    .mood-grid { grid-template-columns: repeat(2, 1fr); }
+    h2 { font-size: 0.88rem; }
   }
 </style>
 </head>
@@ -142,11 +244,18 @@
 
   <!-- Time Range Selector -->
   <div class="range-selector">
-    <a href="/?range=short_term"   class="range-btn {{ 'active' if time_range == 'short_term' else '' }}">4 週</a>
-    <a href="/?range=medium_term"  class="range-btn {{ 'active' if time_range == 'medium_term' else '' }}">6 個月</a>
-    <a href="/?range=long_term"    class="range-btn {{ 'active' if time_range == 'long_term' else '' }}">All Time</a>
+    <a href="/?range=short_term"  class="range-btn {{ 'active' if time_range == 'short_term' else '' }}">4 週</a>
+    <a href="/?range=medium_term" class="range-btn {{ 'active' if time_range == 'medium_term' else '' }}">6 個月</a>
+    <a href="/?range=long_term"   class="range-btn {{ 'active' if time_range == 'long_term' else '' }}">All Time</a>
   </div>
 </header>
+
+<!-- Taste Profile -->
+<div class="profile-banner">
+  <div class="profile-emoji">🎭</div>
+  <div class="profile-text">{{ taste_profile }}</div>
+  <div class="profile-sub">基於流派特徵估算 · {{ streak.status }}</div>
+</div>
 
 <!-- Stats -->
 <div class="stats-row">
@@ -155,56 +264,99 @@
     <div class="stat-label">Top Artists</div>
   </div>
   <div class="stat-box">
-    <div class="stat-val">{{ top_tracks|length }}</div>
+    <div class="stat-val secondary">{{ top_tracks|length }}</div>
     <div class="stat-label">Top Tracks</div>
   </div>
   <div class="stat-box">
-    <div class="stat-val secondary">{{ stats.popularity }}</div>
-    <div class="stat-label">Avg Popularity</div>
+    <div class="stat-val accent3">{{ stats.popularity }}</div>
+    <div class="stat-label">Avg Pop</div>
   </div>
   <div class="stat-box">
-    <div class="stat-val">{{ stats.duration }}m</div>
-    <div class="stat-label">Top 50 Duration</div>
+    <div class="stat-val accent4">{{ stats.duration }}m</div>
+    <div class="stat-label">Top50 Length</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-val">{{ stats.genres }}</div>
+    <div class="stat-label">Genres</div>
   </div>
 </div>
 
-<!-- Audio Features -->
-<h2><span class="icon">🎛️</span> 聆聽特徵</h2>
-<div class="section">
-  <div class="features-grid">
-    <div class="feature-card">
-      <div class="feature-value">{{ (features.danceability * 100)|round|int }}%</div>
-      <div class="feature-label">Danceability</div>
-      <div class="feature-bar-bg"><div class="feature-bar-fill" style="width:{{ features.danceability * 100 }}%"></div></div>
+<!-- Radar Chart + Features (two-column) -->
+<div class="section radar-section" style="padding: 12px 14px;">
+  <!-- Radar -->
+  <div class="radar-chart-wrap">
+    <div class="radar-chart" style="--dance: {{ (features.danceability * 100)|round }}; --energy: {{ (features.energy * 100)|round }}; --valence: {{ (features.valence * 100)|round }};">
+      <div class="radar-bg"></div>
+      <div class="radar-fill"></div>
+      <div class="radar-center"></div>
     </div>
-    <div class="feature-card">
-      <div class="feature-value">{{ (features.energy * 100)|round|int }}%</div>
-      <div class="feature-label">Energy</div>
-      <div class="feature-bar-bg"><div class="feature-bar-fill" style="width:{{ features.energy * 100 }}%"></div></div>
+    <div style="font-size:0.68rem; color: var(--muted);">流派的聆聽特徵</div>
+  </div>
+
+  <!-- Feature bars -->
+  <div style="display:flex; flex-direction:column; gap:8px; justify-content:center;">
+    <div style="font-size:0.75rem; color: var(--muted); margin-bottom:2px;">📊 特徵分析</div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span style="font-size:0.68rem; width:80px; color: var(--muted);">Dance</span>
+      <div style="flex:1; height:6px; background:#333; border-radius:3px; overflow:hidden;">
+        <div style="height:100%; width:{{ (features.danceability * 100)|round }}%; background:var(--accent); border-radius:3px;"></div>
+      </div>
+      <span style="font-size:0.68rem; color:var(--accent); width:32px; text-align:right;">{{ (features.danceability * 100)|round }}%</span>
     </div>
-    <div class="feature-card">
-      <div class="feature-value">{{ (features.valence * 100)|round|int }}%</div>
-      <div class="feature-label">Valence</div>
-      <div class="feature-bar-bg"><div class="feature-bar-fill" style="width:{{ features.valence * 100 }}%"></div></div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span style="font-size:0.68rem; width:80px; color: var(--muted);">Energy</span>
+      <div style="flex:1; height:6px; background:#333; border-radius:3px; overflow:hidden;">
+        <div style="height:100%; width:{{ (features.energy * 100)|round }}%; background:var(--accent2); border-radius:3px;"></div>
+      </div>
+      <span style="font-size:0.68rem; color:var(--accent2); width:32px; text-align:right;">{{ (features.energy * 100)|round }}%</span>
     </div>
-    <div class="feature-card">
-      <div class="feature-value">{{ features.tempo|round|int }}</div>
-      <div class="feature-label">Avg BPM</div>
-      <div class="feature-bar-bg"><div class="feature-bar-fill" style="width:{{ (features.tempo / 200 * 100) }}%"></div></div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span style="font-size:0.68rem; width:80px; color: var(--muted);">Valence</span>
+      <div style="flex:1; height:6px; background:#333; border-radius:3px; overflow:hidden;">
+        <div style="height:100%; width:{{ (features.valence * 100)|round }}%; background:var(--accent3); border-radius:3px;"></div>
+      </div>
+      <span style="font-size:0.68rem; color:var(--accent3); width:32px; text-align:right;">{{ (features.valence * 100)|round }}%</span>
     </div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span style="font-size:0.68rem; width:80px; color: var(--muted);">Avg BPM</span>
+      <div style="flex:1; height:6px; background:#333; border-radius:3px; overflow:hidden;">
+        <div style="height:100%; width:{{ (features.tempo / 200 * 100)|round }}%; background:var(--accent4); border-radius:3px;"></div>
+      </div>
+      <span style="font-size:0.68rem; color:var(--accent4); width:32px; text-align:right;">{{ features.tempo }}</span>
+    </div>
+    <div style="font-size:0.6rem; color:#555; margin-top:2px;">* 來自流派特徵估算</div>
   </div>
 </div>
+
+<!-- Mood Timeline -->
+{% if mood_data and mood_data|length > 0 %}
+<h2><span class="icon">🧠</span> Mood Timeline</h2>
+<div class="section" style="padding: 12px 14px;">
+  <div class="mood-grid">
+    {% for mood in mood_data[:6] %}
+    <div class="mood-card">
+      <div class="mood-emoji">{{ mood.emoji }}</div>
+      <div class="mood-label">{{ mood.label }}</div>
+      <div class="mood-icon">{{ mood.icon }}</div>
+      <div class="mood-bar-bg">
+        <div class="mood-bar-fill" style="width: {{ mood.pct }}%;"></div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
 
 <!-- Two-column: Decade + Listening Time -->
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
   <div class="section">
-    <h2 style="margin-top:0;font-size:0.9rem;"><span class="icon">📅</span> 年代分佈</h2>
+    <h2 style="margin-top:0; font-size:0.88rem;"><span class="icon">📅</span> 年代分佈</h2>
     <div class="decade-bar-chart">
       {% for decade, count in top_decades %}
       <div class="decade-row">
         <div class="decade-label">{{ decade }}</div>
         <div class="decade-bar-bg">
-          <div class="decade-bar-fill" style="width:{{ (count / 50 * 100)|round }}%"></div>
+          <div class="decade-bar-fill" style="width: {{ (count / 50 * 100)|round }}%;"></div>
         </div>
         <div class="decade-count">{{ count }}</div>
       </div>
@@ -213,14 +365,14 @@
   </div>
 
   <div class="section">
-    <h2 style="margin-top:0;font-size:0.9rem;"><span class="icon">🕐</span> 聆聽時段</h2>
+    <h2 style="margin-top:0; font-size:0.88rem;"><span class="icon">🕐</span> 聆聽時段</h2>
     <div class="time-chart">
       {% for label, count in sorted_hours %}
       {% if count > 0 %}
       <div class="time-row">
         <div class="time-label">{{ label }}</div>
         <div class="time-bar-bg">
-          <div class="time-bar-fill" style="width:{{ (count / 50 * 100)|round }}%"></div>
+          <div class="time-bar-fill" style="width: {{ (count / 50 * 100)|round }}%;"></div>
         </div>
         <div class="time-count">{{ count }}</div>
       </div>
@@ -230,13 +382,65 @@
   </div>
 </div>
 
+<!-- Signal / Noise -->
+{% if signal_tracks or noise_tracks %}
+<h2><span class="icon">📡</span> Signal / Noise</h2>
+<div class="section" style="padding: 12px 14px;">
+  <div class="signal-noise-grid">
+    {% if signal_tracks %}
+    <div class="sn-section">
+      <h3 class="gem">💎 Hidden Gems</h3>
+      <div class="sn-list">
+        {% for track in signal_tracks[:4] %}
+        <div class="sn-item">
+          {% set s_album = track['album'] %}
+          {% if s_album and s_album['images'] and s_album['images']|length > 0 %}
+          <img src="{{ s_album['images'][-1]['url'] }}" alt="{{ track['name'] }}">
+          {% endif %}
+          <div class="sn-info">
+            <div class="sn-name">{{ track['name'] }}</div>
+            <div class="sn-artist">{% for a in track['artists'] %}{{ a['name'] }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
+          </div>
+          <span class="sn-badge gem">💎</span>
+        </div>
+        {% endfor %}
+      </div>
+      <p style="font-size:0.62rem; color:#555; margin-top:6px;">低流行度但高契合度 — 你的私藏寶藏</p>
+    </div>
+    {% endif %}
+
+    {% if noise_tracks %}
+    <div class="sn-section">
+      <h3 class="noise">📢 Overplayed</h3>
+      <div class="sn-list">
+        {% for track in noise_tracks[:4] %}
+        <div class="sn-item">
+          {% set n_album = track['album'] %}
+          {% if n_album and n_album['images'] and n_album['images']|length > 0 %}
+          <img src="{{ n_album['images'][-1]['url'] }}" alt="{{ track['name'] }}">
+          {% endif %}
+          <div class="sn-info">
+            <div class="sn-name">{{ track['name'] }}</div>
+            <div class="sn-artist">{% for a in track['artists'] %}{{ a['name'] }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
+          </div>
+          <span class="sn-badge noise">📢</span>
+        </div>
+        {% endfor %}
+      </div>
+      <p style="font-size:0.62rem; color:#555; margin-top:6px;">高流行度 — 可能係主流洗腦歌</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
 <!-- Genre Distribution -->
 <h2><span class="icon">🏷️</span> 流派分佈</h2>
-<div class="section">
+<div class="section" style="padding:10px 14px;">
   <div class="genre-chart">
     {% for genre, count in top_genres %}
     <div class="genre-tag">
-      <div class="bar" style="width:{{ (count * 3)|int + 4 }}px"></div>
+      <div class="bar" style="width:{{ (count * 3)|int + 4 }}px; background: linear-gradient(90deg, var(--accent), var(--accent2));"></div>
       <span class="name">{{ genre }}</span>
       <span class="count">×{{ count }}</span>
     </div>
@@ -246,7 +450,7 @@
 
 <!-- Genre Explorer -->
 <h2><span class="icon">🔭</span> Genre Explorer</h2>
-<div class="section">
+<div class="section" style="padding:10px 14px;">
   {% if discovery_genres and discovery_genres|length > 0 %}
   <div class="genre-chart">
     {% for genre, count in discovery_genres %}
@@ -257,15 +461,15 @@
     </div>
     {% endfor %}
   </div>
-  <p style="color:#555;font-size:0.7rem;margin-top:10px;">你嘅流派分佈 — 來自 Top Artists 流派統計</p>
+  <p style="color:#555; font-size:0.68rem; margin-top:8px;">來自 Top Artists 流派統計 · 流派越多說明品味越多元</p>
   {% else %}
-  <div class="discovery-empty">流派數據取決於 Artist 本身嘅 Spotify 流派標籤</div>
+  <div style="text-align:center; color:var(--muted); font-size:0.8rem; padding:16px;">流派數據取決於 Artist 本身嘅 Spotify 流派標籤</div>
   {% endif %}
 </div>
 
 <!-- Top Artists -->
 <h2><span class="icon">👤</span> Top Artists</h2>
-<div class="section">
+<div class="section" style="padding:10px 12px;">
   <div class="artists-grid">
     {% for artist in top_artists[:20] %}
     <div class="artist-card">
@@ -285,7 +489,7 @@
 
 <!-- Top Tracks -->
 <h2><span class="icon">🎧</span> Top Tracks</h2>
-<div class="section">
+<div class="section" style="padding:10px 12px;">
   <div class="tracks-list">
     {% for track in top_tracks[:30] %}
     <div class="track-item">
@@ -306,7 +510,7 @@
 
 <!-- Recently Played -->
 <h2><span class="icon">⏱️</span> 最近播放</h2>
-<div class="section">
+<div class="section" style="padding:10px 12px;">
   <div class="recent-list">
     {% for item in recent %}
     <div class="recent-item">
@@ -325,6 +529,6 @@
   </div>
 </div>
 
-<footer>Powered by Spotify API · 品味分析 v2.0</footer>
+<footer>品味分析 v3.0 · Spotify API · Signal/Noise · Mood Timeline · 5分鐘快取</footer>
 </body>
 </html>
