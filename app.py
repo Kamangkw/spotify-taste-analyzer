@@ -156,5 +156,14 @@ def api_audio_features(track_ids):
     data = api_get(f'https://api.spotify.com/v1/audio-features?ids={track_ids}')
     return jsonify(data.get('audio_features', []))
 
+@app.route('/debug')
+def debug():
+    try:
+        top_artists = api_get('https://api.spotify.com/v1/me/top/artists?limit=3')
+        return render_template('debug.html', top_artists=top_artists['items'])
+    except Exception as e:
+        import traceback
+        return f"<pre>{e}\n{traceback.format_exc()}</pre>", 500
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

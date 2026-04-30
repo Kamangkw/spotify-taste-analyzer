@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Debug: {{ top_artists|length }} artists</h1>
+{% for artist in top_artists[:3] %}
+<div>
+  <p>Name: {{ artist.name }}</p>
+  <p>Genres: {{ artist.genres[:2]|join(', ') if artist.genres else 'none' }}</p>
+  <p>Images: {{ artist.images[0].url if artist.images else 'no images' }}</p>
+</div>
+{% endfor %}
+</body>
+</html>

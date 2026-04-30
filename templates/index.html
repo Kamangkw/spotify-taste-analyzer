@@ -88,7 +88,7 @@
 <body>
 
 <h1>🎵 品味分析</h1>
-<p style="color:var(--muted);font-size:0.8rem;">數據基於中期聆聽 (medium term)</p>
+<p style="color:var(--muted);font-size:0.8rem;">數據基於中期聆聽 (medium term) · {{ now() }}</p>
 
 <!-- Stats -->
 <div class="stats-row">
@@ -106,7 +106,7 @@
   </div>
 </div>
 
-<!-- Audio Features -->
+<!-- Audio Features (placeholder) -->
 <h2>🎛️ 聆聽特徵</h2>
 <div class="features-grid">
   <div class="feature-card">
@@ -127,7 +127,7 @@
   <div class="feature-card">
     <div class="feature-value">{{ (features.tempo / 2)|round|int }}</div>
     <div class="feature-label">💓 Avg Tempo</div>
-    <div class="feature-bar-bg"><div class="feature-bar-fill" style="width:{{ (features.tempo / 2 / 100) * 100 if features.tempo else 0 }}%"></div></div>
+    <div class="feature-bar-bg"><div class="feature-bar-fill" style="width:{{ (features.tempo / 2 / 100 * 100) if features.tempo else 0 }}%"></div></div>
   </div>
 </div>
 
@@ -167,13 +167,15 @@
   <div class="artists-grid">
     {% for artist in top_artists[:20] %}
     <div class="artist-card">
-      {% if artist.images %}
-      <img src="{{ artist.images[0].url }}" alt="{{ artist.name }}" loading="lazy">
+      {% set has_images = artist.images and artist.images|length > 0 %}
+      {% if has_images %}
+      <img src="{{ artist['images'][0]['url'] }}" alt="{{ artist['name'] }}" loading="lazy">
       {% else %}
       <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23333' width='100' height='100'/><text x='50' y='60' text-anchor='middle' fill='%23666' font-size='40'>?</text></svg>" alt="no image">
       {% endif %}
-      <div class="name">{{ artist.name }}</div>
-      <div class="genres">{% for g in artist.genres[:2] %}{{ g }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
+      <div class="name">{{ artist['name'] }}</div>
+      {% set artist_genres = artist['genres'] if artist['genres'] else [] %}
+      <div class="genres">{% for g in artist_genres[:2] %}{{ g }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
     </div>
     {% endfor %}
   </div>
@@ -186,13 +188,14 @@
     {% for track in top_tracks[:30] %}
     <div class="track-item">
       <div class="track-rank">{{ loop.index }}</div>
-      {% if track.album.images %}
-      <img src="{{ track.album.images[-1].url }}" alt="{{ track.name }}" loading="lazy">
+      {% set track_album = track['album'] %}
+      {% if track_album and track_album['images'] and track_album['images']|length > 0 %}
+      <img src="{{ track_album['images'][-1]['url'] }}" alt="{{ track['name'] }}" loading="lazy">
       {% endif %}
       <div class="track-info">
-        <div class="name">{{ track.name }}</div>
-        <div class="artist">{% for a in track.artists %}{{ a.name }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
-        <div class="album">{{ track.album.name }}</div>
+        <div class="name">{{ track['name'] }}</div>
+        <div class="artist">{% for a in track['artists'] %}{{ a['name'] }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
+        <div class="album">{{ track_album['name'] if track_album else '' }}</div>
       </div>
     </div>
     {% endfor %}
@@ -205,21 +208,23 @@
   <div class="recent-list">
     {% for item in recent %}
     <div class="recent-item">
-      {% if item.track.album.images %}
-      <img src="{{ item.track.album.images[-1].url }}" alt="{{ item.track.name }}" loading="lazy">
+      {% set item_track = item['track'] %}
+      {% set item_album = item_track['album'] if item_track else None %}
+      {% if item_album and item_album['images'] and item_album['images']|length > 0 %}
+      <img src="{{ item_album['images'][-1]['url'] }}" alt="{{ item_track['name'] }}" loading="lazy">
       {% endif %}
       <div class="r-info">
-        <div class="r-name">{{ item.track.name }}</div>
-        <div class="r-artist">{% for a in item.track.artists %}{{ a.name }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
+        <div class="r-name">{{ item_track['name'] if item_track else '' }}</div>
+        <div class="r-artist">{% for a in item_track['artists'] %}{{ a['name'] }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
       </div>
-      <div class="r-time">{{ (item.played_at[11:16]) if item.played_at else '' }}</div>
+      <div class="r-time">{{ (item['played_at'][11:16]) if item['played_at'] else '' }}</div>
     </div>
     {% endfor %}
   </div>
 </div>
 
 <p style="text-align:center;color:#444;font-size:0.7rem;margin-top:32px;margin-bottom:16px;">
-  Powered by Spotify API · {{ now() if now else '' }}
+  Powered by Spotify API
 </p>
 </body>
 </html>
