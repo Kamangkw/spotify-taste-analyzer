@@ -135,11 +135,7 @@
 <h2>📅 年代分佈</h2>
 <div class="section">
   <div class="decade-bar-chart">
-    {% set sorted_decades = [] %}
-    {% for d, c in decade_count.items() %}
-      {% if c > 0 %}{{ sorted_decades.append((d, c)) }}{% endif %}
-    {% endfor %}
-    {% for decade, count in sorted_decades|sort(attribute='1', reverse=true) %}
+    {% for decade, count in top_decades %}
     <div class="decade-row">
       <div class="decade-label">{{ decade }}</div>
       <div class="decade-bar-bg">
@@ -155,11 +151,7 @@
 <h2>🏷️ 流派分佈</h2>
 <div class="section">
   <div class="genre-chart">
-    {% set sorted_genres = [] %}
-    {% for g, c in genre_count.items() %}
-      {% if c >= 2 %}{{ sorted_genres.append((g, c)) }}{% endif %}
-    {% endfor %}
-    {% for genre, count in sorted_genres|sort(attribute='1', reverse=true) %}
+    {% for genre, count in top_genres %}
     <div class="genre-tag">
       <div class="bar" style="width:{{ (count * 4)|int }}px"></div>
       <span class="name">{{ genre }}</span>

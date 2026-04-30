@@ -102,6 +102,8 @@ def index():
     for artist in top_artists['items']:
         for g in artist.get('genres', []):
             genre_count[g] = genre_count.get(g, 0) + 1
+    sorted_genres = sorted(genre_count.items(), key=lambda x: x[1], reverse=True)
+    top_genres = [(g, c) for g, c in sorted_genres if c >= 2]
 
     # ── Decade distribution (from top tracks) ─────────────────
     decade_count = {'2020s': 0, '2010s': 0, '2000s': 0, '1990s': 0, '1980s': 0, 'Earlier': 0}
@@ -114,6 +116,8 @@ def index():
         elif d >= 1990: decade_count['1990s'] += 1
         elif d >= 1980: decade_count['1980s'] += 1
         else: decade_count['Earlier'] += 1
+    sorted_decades = sorted(decade_count.items(), key=lambda x: x[1], reverse=True)
+    top_decades = [(d, c) for d, c in sorted_decades if c > 0]
 
     # ── Audio feature averages (via audio-features endpoint) ────
     track_ids = [t['id'] for t in top_tracks['items'][:20] if t['id']]
@@ -138,8 +142,8 @@ def index():
         top_artists=top_artists['items'],
         top_tracks=top_tracks['items'],
         recent=recent['items'][:20],
-        genre_count=genre_count,
-        decade_count=decade_count,
+        top_genres=top_genres,
+        top_decades=top_decades,
         features=features,
     )
 
