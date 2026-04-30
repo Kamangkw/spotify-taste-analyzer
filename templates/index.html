@@ -444,7 +444,7 @@
     <button class="player-btn play" onclick="playerToggle()" id="playPauseBtn" title="播放/暫停">▶</button>
     <button class="player-btn" onclick="playerNext()" title="下一首">⏭</button>
   </div>
-  <a href="https://open.spotify.com" target="_blank" class="player-open" title="Open Spotify">Spotify</a>
+  <a href="spotify:" class="player-open" onclick="this.href='spotify:'; window.location.href='spotify:';" title="打開 Spotify App">💻 Spotify App</a>
 </div>
 
 <!-- Toast -->
@@ -481,18 +481,32 @@ function updatePlayBtn() {
 }
 
 // ── Play Track ────────────────────────────────────────
+// ── Open Spotify on Windows (spotify: protocol) ──────────
+function openSpotifyApp(trackId) {
+  // Try to open Windows Spotify app via spotify: URI
+  window.location.href = `spotify:track:${trackId}`;
+}
+
+// ── Play Track ────────────────────────────────────────
 async function playTrack(trackId, rowEl) {
   showToast('🎵 播放中...');
   try {
     const r = await fetch(`/api/play-track/${trackId}`, { method: 'POST' });
     const data = await r.json();
     if (!r.ok) {
-      showToast(data.error ? '❌ ' + (data.error.includes('No active') ? '需要打開 Spotify' : '播放失敗') : '❌ 播放失敗');
-      // Fallback: open in Spotify
+      // No active device — try opening Spotify app on Windows via spotify: protocol
+      if (data.error && (data.error.includes('No active') || data.error.includes('Nothing is playing'))) {
+        showToast('📱 正在打開 Spotify...');
+        openSpotifyApp(trackId);
+        // Also try web player as backup
+        setTimeout(() => { window.open(`https://open.spotify.com/track/${trackId}`, '_blank'); }, 1500);
+        return;
+      }
+      showToast('❌ 播放失敗');
       window.open(`https://open.spotify.com/track/${trackId}`, '_blank');
       return;
     }
-    // Update player bar
+    // Success — update player bar
     if (rowEl) {
       const name = rowEl.dataset.trackName;
       const artist = rowEl.dataset.artist;
@@ -505,9 +519,10 @@ async function playTrack(trackId, rowEl) {
     updatePlayBtn();
     showToast('▶ 播放中');
   } catch(e) {
-    // Fallback: open in Spotify
-    window.open(`https://open.spotify.com/track/${trackId}`, '_blank');
-    showToast('🎧 已打開 Spotify');
+    // Network error — try spotify: protocol then web
+    openSpotifyApp(trackId);
+    setTimeout(() => { window.open(`https://open.spotify.com/track/${trackId}`, '_blank'); }, 1000);
+    showToast('📱 已打開 Spotify');
   }
 }
 
