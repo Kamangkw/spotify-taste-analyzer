@@ -3,159 +3,162 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🎵 品味護照 — Spotify</title>
+<title>🎵 Taste DNA — Spotify</title>
 <style>
   :root {
     --bg: #080808;
-    --bg2: #111;
-    --bg3: #1a1a1a;
+    --bg2: #0f0f0f;
+    --bg3: #171717;
     --accent: #1DB954;
     --text: #eee;
     --muted: #555;
-    --border: #2a2a2a;
-    --dim: #333;
+    --border: #222;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, sans-serif; max-width: 540px; margin: 0 auto; padding: 20px 16px 60px; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, sans-serif; max-width: 520px; margin: 0 auto; padding: 18px 14px 60px; }
 
-  /* ── Header ── */
-  header { margin-bottom: 24px; }
-  h1 { font-size: 1.6rem; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
-  .subtitle { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+  /* Header */
+  header { margin-bottom: 20px; }
+  h1 { font-size: 1.5rem; font-weight: 900; background: linear-gradient(90deg, var(--accent), #509bf5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .subtitle { font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
 
-  /* ── Range Tabs ── */
-  .tabs { display: flex; gap: 4px; margin-bottom: 20px; }
-  .tab { flex: 1; padding: 6px; text-align: center; border-radius: 8px; border: 1px solid var(--border); background: var(--bg2); color: var(--muted); font-size: 0.75rem; cursor: pointer; text-decoration: none; transition: all 0.15s; }
+  /* Tabs */
+  .tabs { display: flex; gap: 4px; margin-bottom: 18px; }
+  .tab { flex: 1; padding: 6px; text-align: center; border-radius: 8px; border: 1px solid var(--border); background: var(--bg2); color: var(--muted); font-size: 0.73rem; cursor: pointer; text-decoration: none; transition: all 0.15s; }
   .tab:hover { border-color: var(--accent); color: var(--text); }
   .tab.active { background: var(--accent); color: #000; font-weight: 700; border-color: var(--accent); }
 
-  /* ── Section label ── */
-  .label { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px; }
+  /* Section label */
+  .lbl { font-size: 0.58rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px; }
 
-  /* ── Profile card ── */
-  .profile-card {
-    background: linear-gradient(145deg, #0f1a0f, #0a150a);
-    border: 1px solid #1a3a1a;
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 16px;
-    text-align: center;
-  }
-  .profile-emoji { font-size: 2.4rem; }
-  .profile-name { font-size: 1.1rem; font-weight: 700; margin-top: 6px; }
-  .profile-sub { font-size: 0.7rem; color: var(--muted); margin-top: 4px; }
+  /* Profile */
+  .profile { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 14px; text-align: center; }
+  .profile-name { font-size: 1.05rem; font-weight: 800; margin-top: 4px; }
+  .profile-sub { font-size: 0.68rem; color: var(--muted); margin-top: 4px; }
 
-  /* ── Stats row ── */
-  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 20px; }
-  .stat { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 6px; text-align: center; }
-  .stat-val { font-size: 1.3rem; font-weight: 800; color: var(--accent); }
-  .stat-key { font-size: 0.58rem; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+  /* Stats strip */
+  .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-bottom: 14px; }
+  .st { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 4px; text-align: center; }
+  .st-val { font-size: 1.1rem; font-weight: 800; color: var(--accent); }
+  .st-key { font-size: 0.52rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 1px; }
 
-  /* ── Big number ── */
-  .big-num-card {
-    background: var(--bg2);
+  /* DNA bars */
+  .dna-section { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
+  .dna-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+  .dna-row:last-child { margin-bottom: 0; }
+  .dna-dim { font-size: 0.7rem; font-weight: 700; width: 52px; flex-shrink: 0; }
+  .dna-bar-bg { flex: 1; height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
+  .dna-bar-fill { height: 100%; border-radius: 4px; transition: width 1.2s ease; }
+  .dna-pct { font-size: 0.68rem; color: var(--muted); width: 32px; text-align: right; flex-shrink: 0; }
+  .dna-colors: {'Groove':'#e91e63','Edge':'#ff9800','Chill':'#509bf5','Pop':'#9c27b0','Depth':'#4caf50'}
+
+  /* Decade breakdown */
+  .decade-strip { display: flex; flex-direction: column; gap: 4px; background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
+  .dec-row { display: flex; align-items: center; gap: 8px; }
+  .dec-label { font-size: 0.7rem; width: 80px; color: var(--muted); flex-shrink: 0; }
+  .dec-bar-bg { flex: 1; height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
+  .dec-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent), #509bf5); }
+  .dec-count { font-size: 0.65rem; color: var(--accent); width: 20px; text-align: right; flex-shrink: 0; }
+  .dec-age { font-size: 0.6rem; color: var(--muted); width: 40px; text-align: right; flex-shrink: 0; }
+
+  /* Artist connections web */
+  .conn-section { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 12px; }
+  .conn-web { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+  .conn-node {
+    background: var(--bg3);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
+    border-radius: 10px;
+    padding: 6px 4px;
+    text-align: center;
+    position: relative;
   }
-  .big-num { font-size: 3rem; font-weight: 900; color: var(--accent); line-height: 1; }
-  .big-num-unit { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
-  .big-num-label { font-size: 0.85rem; font-weight: 600; }
-  .big-num-sub { font-size: 0.68rem; color: var(--muted); margin-top: 3px; }
+  .conn-node img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: var(--bg); display: block; margin: 0 auto 3px; }
+  .conn-node .name { font-size: 0.6rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .conn-node .links { font-size: 0.5rem; color: var(--muted); }
+  .conn-node.primary { border-color: var(--accent); }
+  .conn-node.primary img { border: 2px solid var(--accent); }
 
-  /* ── Discovery meter ── */
-  .meter-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 12px; }
-  .meter-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-  .meter-title { font-size: 0.8rem; font-weight: 600; }
-  .meter-score { font-size: 1.4rem; font-weight: 900; color: var(--accent); }
-  .meter-bar { height: 6px; background: var(--dim); border-radius: 3px; overflow: hidden; }
-  .meter-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
-  .meter-labels { display: flex; justify-content: space-between; font-size: 0.58rem; color: var(--muted); margin-top: 4px; }
-  .meter-label { font-size: 0.72rem; color: var(--accent); font-weight: 600; margin-top: 6px; }
+  /* Peak hours */
+  .peak-section { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 12px; }
+  .peak-title { font-size: 0.72rem; font-weight: 700; margin-bottom: 8px; }
+  .peak-peak { font-size: 0.65rem; color: var(--accent); margin-bottom: 8px; }
+  .hours-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; }
+  .hour-cell { height: 28px; display: flex; align-items: flex-end; justify-content: center; border-radius: 2px; transition: all 0.2s; cursor: default; }
+  .hour-cell .h { font-size: 0.48rem; color: var(--muted); text-align: center; line-height: 1; padding-bottom: 1px; }
+  .hours-night { background: rgba(29,185,84,0.05); }
+  .hours-morning { background: rgba(29,185,84,0.15); }
+  .hours-afternoon { background: rgba(29,185,84,0.25); }
+  .hours-evening { background: rgba(29,185,84,0.5); }
 
-  /* ── Timeline bar ── */
-  .time-section { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
-  .time-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
-  .time-label { font-size: 0.68rem; color: var(--muted); width: 80px; flex-shrink: 0; }
-  .time-bar-bg { flex: 1; height: 5px; background: var(--dim); border-radius: 3px; overflow: hidden; }
-  .time-bar-fill { height: 100%; border-radius: 3px; }
-  .time-val { font-size: 0.65rem; color: var(--accent); width: 24px; text-align: right; flex-shrink: 0; }
-  .time-peak { font-size: 0.6rem; color: var(--muted); margin-top: 4px; }
-
-  /* ── Calendar heatmap ── */
-  .cal-section { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 12px; }
-  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
-  .cal-cell { aspect-ratio: 1; border-radius: 2px; display: flex; align-items: center; justify-content: center; min-height: 24px; }
-  .cal-cell .d { font-size: 0.55rem; font-weight: 600; line-height: 1; }
-  .cal-cell .c { font-size: 0.45rem; opacity: 0.6; line-height: 1; margin-top: 1px; }
+  /* Heatmap */
+  .heat-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+  .heat-cell { aspect-ratio: 1; border-radius: 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 22px; }
+  .heat-cell .d { font-size: 0.52rem; font-weight: 600; line-height: 1; }
+  .heat-cell .c { font-size: 0.44rem; opacity: 0.6; line-height: 1; margin-top: 1px; }
   .level-0 { background: var(--bg3); }
-  .level-1 { background: #0f2a0f; }
-  .level-2 { background: #1a4a1a; }
-  .level-3 { background: #1a6a1a; }
+  .level-1 { background: #0d2a0d; }
+  .level-2 { background: #1a5a1a; }
+  .level-3 { background: #1a7a1a; }
   .level-4 { background: var(--accent); }
   .level-4 .d { color: #000; }
 
-  /* ── Signal / Noise ── */
-  .sn-list { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 10px; }
-  .sn-row { display: flex; align-items: center; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--border); }
-  .sn-row:last-child { border-bottom: none; }
-  .sn-row img { width: 30px; height: 30px; border-radius: 4px; background: var(--bg3); flex-shrink: 0; }
+  /* Collab list */
+  .collab-section { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 12px; }
+  .collab-row { display: flex; align-items: center; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--border); }
+  .collab-row:last-child { border-bottom: none; }
+  .collab-row img { width: 28px; height: 28px; border-radius: 50%; background: var(--bg3); flex-shrink: 0; object-fit: cover; }
+  .collab-name { font-size: 0.75rem; font-weight: 600; flex: 1; }
+  .collab-count { font-size: 0.65rem; color: var(--muted); flex-shrink: 0; }
+  .collab-bar-bg { width: 50px; height: 3px; background: var(--bg3); border-radius: 2px; overflow: hidden; flex-shrink: 0; }
+  .collab-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; }
+
+  /* Signal/Noise */
+  .sn-section { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .sn-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 12px; }
+  .sn-title { font-size: 0.7rem; font-weight: 700; margin-bottom: 8px; }
+  .sn-row { display: flex; align-items: center; gap: 6px; padding: 3px 0; }
+  .sn-row img { width: 26px; height: 26px; border-radius: 3px; background: var(--bg3); flex-shrink: 0; }
   .sn-info { flex: 1; min-width: 0; }
-  .sn-name { font-size: 0.78rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .sn-artist { font-size: 0.62rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .sn-badge { font-size: 0.7rem; flex-shrink: 0; }
+  .sn-name { font-size: 0.7rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sn-artist { font-size: 0.58rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* ── Timeless artists ── */
-  .timeless-list { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
-  .timeless-row { display: flex; align-items: center; gap: 10px; background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; }
-  .timeless-rank { font-size: 0.7rem; color: var(--muted); width: 18px; text-align: center; flex-shrink: 0; }
-  .timeless-row img { width: 34px; height: 34px; border-radius: 50%; background: var(--bg3); flex-shrink: 0; object-fit: cover; }
-  .timeless-name { font-size: 0.82rem; font-weight: 600; flex: 1; }
-  .timeless-g { font-size: 0.62rem; color: var(--muted); }
-  .timeless-badge { font-size: 0.6rem; padding: 2px 6px; border-radius: 8px; background: #1a3a1a; color: var(--accent); flex-shrink: 0; }
+  /* Tracks */
+  .tracks-section { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 12px; }
+  .track-row { display: flex; align-items: center; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--border); }
+  .track-row:last-child { border-bottom: none; }
+  .track-row:hover { background: var(--bg3); margin: 0 -8px; padding: 5px 8px; border-radius: 6px; }
+  .track-n { font-size: 0.65rem; color: var(--muted); width: 18px; text-align: center; flex-shrink: 0; }
+  .track-row img { width: 32px; height: 32px; border-radius: 4px; background: var(--bg3); flex-shrink: 0; }
+  .track-name { font-size: 0.78rem; font-weight: 600; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .track-artist { font-size: 0.62rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* ── Genre tags ── */
-  .genre-cloud { display: flex; flex-wrap: wrap; gap: 5px; background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 12px; }
-  .g-tag { background: var(--bg3); border-radius: 20px; padding: 4px 10px; font-size: 0.7rem; display: flex; align-items: center; gap: 4px; }
+  /* Genre cloud */
+  .genre-cloud { display: flex; flex-wrap: wrap; gap: 4px; background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 12px; }
+  .g-tag { background: var(--bg3); border-radius: 20px; padding: 3px 8px; font-size: 0.68rem; display: flex; align-items: center; gap: 3px; }
   .g-tag .bar { height: 4px; background: var(--accent); border-radius: 2px; min-width: 4px; }
 
-  /* ── Tracks list ── */
-  .tracks-list { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
-  .track-row { display: flex; align-items: center; gap: 9px; background: var(--bg2); border-radius: 8px; padding: 6px 8px; }
-  .track-row:hover { background: var(--bg3); }
-  .track-n { font-size: 0.72rem; color: var(--muted); width: 18px; text-align: center; flex-shrink: 0; }
-  .track-row img { width: 34px; height: 34px; border-radius: 4px; background: var(--bg3); flex-shrink: 0; }
-  .track-info { flex: 1; min-width: 0; }
-  .track-name { font-size: 0.8rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .track-artist { font-size: 0.65rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-  /* ── Footer actions ── */
-  .actions { display: flex; gap: 8px; margin-top: 20px; }
+  /* Footer actions */
+  .actions { display: flex; gap: 8px; margin-top: 18px; }
   .action-btn { flex: 1; padding: 9px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg2); color: var(--text); font-size: 0.75rem; cursor: pointer; text-align: center; text-decoration: none; transition: all 0.15s; }
   .action-btn:hover { border-color: var(--accent); }
   .action-btn.primary { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
 
-  footer { text-align: center; color: #333; font-size: 0.6rem; margin-top: 30px; padding: 12px; }
+  footer { text-align: center; color: #333; font-size: 0.6rem; margin-top: 30px; padding: 10px; }
 
-  @keyframes fade { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
-  .profile-card, .big-num-card, .meter-card, .time-section, .cal-section, .sn-list, .timeless-list, .genre-cloud, .tracks-list { animation: fade 0.4s ease both; }
-  .big-num-card { animation-delay: 0.05s; }
-  .meter-card { animation-delay: 0.08s; }
-  .time-section { animation-delay: 0.1s; }
+  @keyframes fade { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:none; } }
+  .profile, .stats, .dna-section, .decade-strip, .conn-section, .peak-section, .collab-section, .sn-section, .tracks-section, .genre-cloud { animation: fade 0.35s ease both; }
+  .stats { animation-delay: 0.03s; }
+  .dna-section { animation-delay: 0.06s; }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>🎵 品味護照</h1>
+  <h1>Taste DNA</h1>
   <p class="subtitle">Spotify · {{ now() }}</p>
 </header>
 
-<!-- Time Range -->
+<!-- Tabs -->
 <div class="tabs">
   <a href="/?range=short_term"  class="tab {{ 'active' if time_range=='short_term' else '' }}">4週</a>
   <a href="/?range=medium_term" class="tab {{ 'active' if time_range=='medium_term' else '' }}">6個月</a>
@@ -163,127 +166,149 @@
 </div>
 
 <!-- Profile -->
-<div class="profile-card">
-  <div class="profile-emoji">🎭</div>
+<div class="profile">
   <div class="profile-name">{{ taste_profile }}</div>
   <div class="profile-sub">{{ streak.status }}</div>
 </div>
 
-<!-- Key Stats -->
-<div class="stats-row">
-  <div class="stat"><div class="stat-val">{{ top_artists|length }}</div><div class="stat-key">Artists</div></div>
-  <div class="stat"><div class="stat-val" style="color:#509bf5;">{{ top_tracks|length }}</div><div class="stat-key">Tracks</div></div>
-  <div class="stat"><div class="stat-val" style="color:#e91e63;">{{ stats.popularity }}</div><div class="stat-key">Avg Pop</div></div>
-  <div class="stat"><div class="stat-val" style="color:#ff9800;">{{ stats.duration }}m</div><div class="stat-key">Top50</div></div>
+<!-- Stats -->
+<div class="stats">
+  <div class="st"><div class="st-val">{{ top_artists|length }}</div><div class="st-key">Artists</div></div>
+  <div class="st"><div class="st-val" style="color:#509bf5;">{{ top_tracks|length }}</div><div class="st-key">Tracks</div></div>
+  <div class="st"><div class="st-val" style="color:#e91e63;">{{ stats.popularity }}</div><div class="st-key">Avg Pop</div></div>
+  <div class="st"><div class="st-val" style="color:#ff9800;">{% if music_age %}{{ music_age.age }}{% else %}—{% endif %}</div><div class="st-key">Music Age</div></div>
+  <div class="st"><div class="st-val">{{ stats.duration }}m</div><div class="st-key">Top50</div></div>
 </div>
 
-<!-- Music Age -->
-{% if music_age %}
-<div class="big-num-card">
-  <div>
-    <div class="big-num">{{ music_age.age }}</div>
-    <div class="big-num-unit">歲</div>
-  </div>
-  <div>
-    <div class="big-num-label">Music Age</div>
-    <div class="big-num-sub">你聽的音樂平均來自 {{ music_age.avg_year }} 年 | 主力 {{ music_age.dominant_decade }}</div>
-  </div>
-</div>
-{% endif %}
-
-<!-- Discovery Score -->
-{% if discovery %}
-<div class="meter-card">
-  <div class="meter-header">
-    <span class="meter-title">Discovery Score</span>
-    <span class="meter-score">{{ discovery.score }}</span>
-  </div>
-  <div class="meter-bar"><div class="meter-fill" style="width:{{ discovery.score }}%; background: linear-gradient(90deg, #e91e63, var(--accent));"></div></div>
-  <div class="meter-labels"><span>流行天王</span><span>地下獵人</span></div>
-  <div class="meter-label">{{ discovery.label }} · 平均流行度 {{ discovery.avg_pop }}</div>
-</div>
-{% endif %}
-
-<!-- Energy Arc -->
-{% if energy_arc and energy_arc|length > 0 %}
-<div class="time-section">
-  <div class="label">Energy Arc · 聆聽時段</div>
-  {% for item in energy_arc %}
-  <div class="time-row">
-    <span class="time-label">{{ item.label }}</span>
-    <div class="time-bar-bg"><div class="time-bar-fill" style="width:{{ item.pct }}%; background: {{ 'var(--accent)' if item.is_peak else '#509bf5' }};"></div></div>
-    <span class="time-val">{{ item.count }}</span>
+<!-- Taste DNA -->
+{% if dna and dna|length > 0 %}
+<div class="dna-section">
+  <div class="lbl">Taste DNA</div>
+  {% set dna_colors = {'Groove':'#e91e63','Edge':'#ff9800','Chill':'#509bf5','Pop':'#9c27b0','Depth':'#4caf50'} %}
+  {% for item in dna %}
+  <div class="dna-row">
+    <span class="dna-dim" style="color: {{ dna_colors.get(item.dim, 'var(--accent)') }};">{{ item.dim }}</span>
+    <div class="dna-bar-bg">
+      <div class="dna-bar-fill" style="width: {{ item.pct }}%; background: {{ dna_colors.get(item.dim, 'var(--accent)') }};"></div>
+    </div>
+    <span class="dna-pct">{{ item.pct }}%</span>
   </div>
   {% endfor %}
-  {% set peak = energy_arc|selectattr('is_peak')|first %}
-  {% if peak %}<div class="time-peak">peak: {{ peak.label }}</div>{% endif %}
 </div>
 {% endif %}
 
-<!-- Calendar Heatmap -->
-<div class="cal-section">
-  <div class="label" style="margin-bottom:8px;">28天聆聽日曆</div>
-  <div class="cal-grid">
-    {% for cell in heatmap %}
-    <div class="cal-cell level-{{ cell.level }}" title="{{ cell.date }}: {{ cell.count }}">
-      <span class="d">{{ cell.daynum }}</span>
-      {% if cell.count > 0 %}<span class="c">{{ cell.count }}</span>{% endif %}
+<!-- Decade Breakdown -->
+{% if decade_data and decade_data|length > 0 %}
+<div class="decade-strip">
+  <div class="lbl">Decade Breakdown · 音樂年代</div>
+  {% for d in decade_data[:6] %}
+  <div class="dec-row">
+    <span class="dec-label">{{ d.label }}</span>
+    <div class="dec-bar-bg">
+      <div class="dec-bar-fill" style="width: {{ (d.count / decade_data[0].count * 100)|round }}%;"></div>
+    </div>
+    <span class="dec-count">{{ d.count }}</span>
+    <span class="dec-age">{{ d.age }}年前</span>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- Peak Hours -->
+{% if hours_data and hours_data|length > 0 %}
+<div class="peak-section">
+  <div class="peak-title">⏰ Peak Hours · 黃金時段</div>
+  {% if peak_label %}<div class="peak-peak">最活躍：{{ peak_label }}</div>{% endif %}
+  <div class="hours-grid">
+    {% for h in hours_data[:24] %}
+    {% if h.hour >= 0 and h.hour < 6 %}
+    {% set cls = 'hours-night' %}
+    {% elif h.hour >= 6 and h.hour < 12 %}
+    {% set cls = 'hours-morning' %}
+    {% elif h.hour >= 12 and h.hour < 18 %}
+    {% set cls = 'hours-afternoon' %}
+    {% else %}
+    {% set cls = 'hours-evening' %}
+    {% endif %}
+    <div class="hour-cell {{ cls }}" style="opacity: {{ h.pct / 100 * 0.8 + 0.1 }};" title="{{ h.label }}: {{ h.count }}首">
+      <span class="h">{{ h.label[:2] }}</span>
     </div>
     {% endfor %}
   </div>
+  <div style="display:flex; gap:8px; margin-top:6px; font-size:0.55rem; color:var(--muted);">
+    <span>🌙深夜</span><span>🌅早晨</span><span>☀️下午</span><span>🌆傍晚</span>
+  </div>
+</div>
+{% endif %}
+
+<!-- 28-day heatmap -->
+<div style="margin-bottom: 12px;">
+  <div class="lbl" style="margin-bottom: 6px;">28天聆聽日曆</div>
+  <div style="background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 10px;">
+    <div class="heat-grid">
+      {% for cell in heatmap %}
+      <div class="heat-cell level-{{ cell.level }}" title="{{ cell.date }}: {{ cell.count }}">
+        <span class="d">{{ cell.daynum }}</span>
+        {% if cell.count > 0 %}<span class="c">{{ cell.count }}</span>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 
-<!-- Timeless Artists (appear in all 3 ranges) -->
-{% if timeless and timeless|length > 0 %}
-<div class="label">Timeless · 横跨所有時間段的愛</div>
-<div class="timeless-list">
-  {% for a in timeless %}
-  <div class="timeless-row">
-    <span class="timeless-rank">{{ loop.index }}</span>
-    {% if a.images and a.images|length > 0 %}
-    <img src="{{ a.images[0]['url'] }}" alt="{{ a.name }}">
-    {% else %}<div style="width:34px;height:34px;border-radius:50%;background:var(--bg3);"></div>{% endif %}
-    <div style="flex:1;min-width:0;">
-      <div class="timeless-name">{{ a.name }}</div>
-      <div class="timeless-g">{% for g in a.genres[:2] %}{{ g }}{% if not loop.last %} · {% endif %}{% endfor %}</div>
+<!-- Artist Connections Web -->
+{% if artist_conns and artist_conns|length > 0 %}
+<div class="conn-section">
+  <div class="lbl">Artist Network · 你的音樂圈</div>
+  <div class="conn-web">
+    {% for a in artist_conns[:12] %}
+    <div class="conn-node {{ 'primary' if loop.index <= 3 else '' }}">
+      {% if a.images and a.images|length > 0 %}
+      <img src="{{ a.images[0]['url'] }}" alt="{{ a.name }}">
+      {% else %}
+      <div style="width:40px;height:40px;border-radius:50%;background:var(--bg);margin:0 auto 3px;"></div>
+      {% endif %}
+      <div class="name">{{ a.name }}</div>
+      <div class="links">{{ a.connected_to|length }} connections</div>
     </div>
-    <span class="timeless-badge">avg #{{ a.avg_rank }}</span>
+    {% endfor %}
   </div>
-  {% endfor %}
 </div>
 {% endif %}
 
 <!-- Signal / Noise -->
 {% if signal_tracks or noise_tracks %}
-<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px;">
+<div class="sn-section">
   {% if signal_tracks %}
-  <div class="sn-list">
-    <div class="label" style="color:var(--accent);">💎 Hidden Gems</div>
-    {% for track in signal_tracks[:4] %}
+  <div class="sn-card">
+    <div class="sn-title" style="color:var(--accent);">💎 Hidden Gems</div>
+    {% for t in signal_tracks[:4] %}
     <div class="sn-row">
-      {% set a = track.album %}{% if a and a.images and a.images|length > 0 %}
-      <img src="{{ a.images[-1]['url'] }}" alt="{{ track.name }}">{% endif %}
+      {% set al = t.album %}
+      {% if al and al.images and al.images|length > 0 %}
+      <img src="{{ al.images[-1]['url'] }}" alt="{{ t.name }}">
+      {% endif %}
       <div class="sn-info">
-        <div class="sn-name">{{ track.name }}</div>
-        <div class="sn-artist">{% for ar in track.artists %}{{ ar.name }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
+        <div class="sn-name">{{ t.name }}</div>
+        <div class="sn-artist">{% for ar in t.artists %}{{ ar.name }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
       </div>
-      <span class="sn-badge">💎</span>
     </div>
     {% endfor %}
   </div>
   {% endif %}
   {% if noise_tracks %}
-  <div class="sn-list">
-    <div class="label" style="color:#e91e63;">📢 Overplayed</div>
-    {% for track in noise_tracks[:4] %}
+  <div class="sn-card">
+    <div class="sn-title" style="color:#e91e63;">📢 Overplayed</div>
+    {% for t in noise_tracks[:4] %}
     <div class="sn-row">
-      {% set a = track.album %}{% if a and a.images and a.images|length > 0 %}
-      <img src="{{ a.images[-1]['url'] }}" alt="{{ track.name }}">{% endif %}
+      {% set al = t.album %}
+      {% if al and al.images and al.images|length > 0 %}
+      <img src="{{ al.images[-1]['url'] }}" alt="{{ t.name }}">
+      {% endif %}
       <div class="sn-info">
-        <div class="sn-name">{{ track.name }}</div>
-        <div class="sn-artist">{% for ar in track.artists %}{{ ar.name }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
+        <div class="sn-name">{{ t.name }}</div>
+        <div class="sn-artist">{% for ar in t.artists %}{{ ar.name }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
       </div>
-      <span class="sn-badge">📢</span>
     </div>
     {% endfor %}
   </div>
@@ -291,10 +316,26 @@
 </div>
 {% endif %}
 
+<!-- Top Collaborators -->
+{% if top_collab and top_collab|length > 0 %}
+<div class="collab-section">
+  <div class="lbl">Top Collaborators · 合作最密的Artist</div>
+  {% for c in top_collab[:6] %}
+  <div class="collab-row">
+    {% if c.images and c.images|length > 0 %}
+    <img src="{{ c.images[0]['url'] }}" alt="{{ c.name }}">
+    {% else %}<div style="width:28px;height:28px;border-radius:50%;background:var(--bg3);flex-shrink:0;"></div>{% endif %}
+    <div class="collab-name">{{ c.name }}</div>
+    <div class="collab-bar-bg"><div class="collab-bar-fill" style="width: {{ (c.count / top_collab[0].count * 100)|round }}%;"></div></div>
+    <span class="collab-count">{{ c.count }}曲</span>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
 <!-- Genre Cloud -->
-<div class="label">Genre Cloud</div>
 <div class="genre-cloud">
-  {% for genre, count in top_genres[:20] %}
+  {% for genre, count in top_genres[:18] %}
   <div class="g-tag">
     <div class="bar" style="width:{{ (count * 2 + 4) }}px;"></div>
     <span>{{ genre }}</span>
@@ -303,43 +344,27 @@
 </div>
 
 <!-- Top Tracks -->
-<div class="label">Top Tracks</div>
-<div class="tracks-list">
-  {% for track in top_tracks[:20] %}
+<div class="tracks-section">
+  <div class="lbl">Top Tracks</div>
+  {% for t in top_tracks[:15] %}
   <div class="track-row">
     <span class="track-n">{{ loop.index }}</span>
-    {% set al = track.album %}
+    {% set al = t.album %}
     {% if al and al.images and al.images|length > 0 %}
-    <img src="{{ al.images[-1]['url'] }}" alt="{{ track.name }}" loading="lazy">
+    <img src="{{ al.images[-1]['url'] }}" alt="{{ t.name }}" loading="lazy">
     {% endif %}
-    <div class="track-info">
-      <div class="track-name">{{ track.name }}</div>
-      <div class="track-artist">{% for a in track.artists %}{{ a.name }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
-    </div>
-  </div>
-  {% endfor %}
-</div>
-
-<!-- Top Artists grid -->
-<div class="label">Top Artists</div>
-<div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:6px; margin-bottom:12px;">
-  {% for artist in top_artists[:12] %}
-  <div style="text-align:center; background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:8px 4px;">
-    {% if artist.images and artist.images|length > 0 %}
-    <img src="{{ artist.images[0]['url'] }}" alt="{{ artist.name }}" style="width:56px;height:56px;border-radius:50%;object-fit:cover;margin-bottom:4px;background:var(--bg3);">
-    {% endif %}
-    <div style="font-size:0.68rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ artist.name }}</div>
+    <div class="track-name">{{ t.name }}</div>
   </div>
   {% endfor %}
 </div>
 
 <!-- Actions -->
 <div class="actions">
-  <button class="action-btn primary" onclick="copyShare()">📋 複製分享</button>
+  <button class="action-btn primary" onclick="copyShare()">📋 複製</button>
   <a href="/?range={{ time_range }}&t={{ range(1000,9999)|random }}" class="action-btn">🔄 刷新</a>
 </div>
 
-<footer>v8.0 · 品味護照 · Spotify</footer>
+<footer>Taste DNA v9 · Spotify</footer>
 
 <textarea id="shareText" style="display:none;">{{ share }}</textarea>
 <script>
@@ -348,7 +373,7 @@ function copyShare() {
   navigator.clipboard.writeText(t).then(() => {
     const b = document.querySelector('.action-btn.primary');
     b.textContent = '✅ 已複製';
-    setTimeout(() => b.textContent = '📋 複製分享', 1800);
+    setTimeout(() => b.textContent = '📋 複製', 1800);
   });
 }
 </script>

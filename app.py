@@ -1,6 +1,6 @@
 """
-Spotify Taste Analyzer v8 — Flask Backend
-Unique: Music Age · Timeless Artists · Energy Arc · Discovery Score · Guilty Pleasures
+Spotify Taste Analyzer v9 — Flask Backend
+Artist Connection Web · Taste DNA · Decade Breakdown · Peak Hours
 """
 import os, re, time
 from flask import Flask, render_template, jsonify, request
@@ -52,7 +52,179 @@ def estimate_features(genres):
     scores['tempo'] = int(60 + scores['energy']*120)
     return scores
 
-# Cache
+# ── Taste DNA ──────────────────────────────────────────
+def taste_dna(top_artists, top_tracks, top_genres):
+    """
+    What defines your taste? 5 dimensions:
+    - Groove (dance + funk + disco + soul)
+    - Edge (punk + metal + core + noise)
+    - Chill (ambient + lo-fi + chill + dream pop)
+    - Pop (k-pop + j-pop + c-pop + mainstream)
+    - Depth (classical + jazz + post-rock + shoegaze)
+    """
+    dim_scores = {'Groove':0,'Edge':0,'Chill':0,'Pop':0,'Depth':0}
+    dim_genres = {
+        'Groove':['dance','funk','disco','soul','r&b','groove','house','garage','uk garage','reggae','dancehall'],
+        'Edge':['punk','metal','hardcore','core','grunge','noise','alternative rock','post-punk','industrial'],
+        'Chill':['ambient','lo-fi','lofi','chill','chillwave','dream pop','shoegaze','post-rock','vaporwave','meditation'],
+        'Pop':['pop','k-pop','j-pop','c-pop','mandopop','electropop','synthpop','teen pop','bubblegum pop'],
+        'Depth':['classical','jazz','avant-garde','experimental','noise rock','black metal','doom','drone'],
+    }
+    for genre, count in top_genres[:15]:
+        gl = genre.lower()
+        for dim, keywords in dim_genres.items():
+            if any(k in gl for k in keywords):
+                dim_scores[dim] += count
+    total = sum(dim_scores.values()) or 1
+    result = []
+    for dim, score in dim_scores.items():
+        pct = round(score / total * 100)
+        result.append({'dim': dim, 'pct': pct, 'raw': score})
+    result.sort(key=lambda x: x['pct'], reverse=True)
+    return result
+
+# ── Decade Breakdown ─────────────────────────────────
+def decade_breakdown(top_tracks):
+    """More granular decade + half-decade analysis"""
+    buckets = {}
+    for t in top_tracks:
+        yr_str = t.get('album',{}).get('release_date','0000')[:4]
+        if not yr_str.isdigit(): continue
+        yr = int(yr_str)
+        half = 'a' if (yr % 10) < 5 else 'b'
+        bucket = f"{(yr//10)*10}s{half}"  # e.g. "2010sa" = early 2010s, "2010sb" = late 2010s
+        buckets[bucket] = buckets.get(bucket, 0) + 1
+    # Human labels
+    labels = {
+        '2020sa':'2020 early','2020sb':'2020 late',
+        '2010sa':'2010 early','2010sb':'2010 late',
+        '2000sa':'2000 early','2000sb':'2000 late',
+        '1990sa':'1990 early','1990sb':'1990 late',
+        '1980sa':'1980 early','1980sb':'1980 late',
+    }
+    result = []
+    for bucket, count in sorted(buckets.items(), key=lambda x: x[0], reverse=True):
+        label = labels.get(bucket, bucket)
+        yr = int(bucket[:4])
+        age = datetime.now().year - yr
+        result.append({'bucket':bucket,'label':label,'count':count,'age':age})
+    return result
+
+# ── Artist Connections ─────────────────────────────────
+def artist_connections(top_artists, top_tracks):
+    """
+    Build connection map: artists linked if they appear in same track's artist list
+    """
+    connections = {}  # artist_id -> {name, images, genres, connected_to: []}
+    for a in top_artists:
+        connections[a['id']] = {'name':a['name'],'images':a.get('images',[]),'genres':a.get('genres',[]),'connected_to':[]}
+    # Connect artists that share a track
+    for t in top_tracks:
+        artists_in_track = [a['id'] for a in t.get('artists',[])]
+        for aid in artists_in_track:
+            if aid in connections:
+                for other in artists_in_track:
+                    if other != aid and other in connections:
+                        if other not in connections[aid]['connected_to']:
+                            connections[aid]['connected_to'].append(other)
+    # Return top 15 most connected artists
+    ranked = sorted(connections.values(), key=lambda x: len(x['connected_to']), reverse=True)
+    return ranked[:15]
+
+# ── Peak Hours ────────────────────────────────────────
+def peak_hours(recent_items):
+    """Find exact peak listening hours"""
+    hour_count = {}
+    for item in recent_items:
+        try:
+            h = int(item.get('played_at','')[11:13])
+            hour_count[h] = hour_count.get(h, 0) + 1
+        except: continue
+    if not hour_count: return []
+    max_h = max(hour_count.values())
+    result = []
+    for h in range(24):
+        c = hour_count.get(h, 0)
+        pct = round(c / max_h * 100) if max_h > 0 else 0
+        label = f"{h:02d}:00"
+        result.append({'hour':h,'label':label,'count':c,'pct':pct})
+    # Top 3 hours
+    top3 = sorted(hour_count.items(), key=lambda x: x[1], reverse=True)[:3]
+    peak_label = f"{top3[0][0]:02d}:00 - {(top3[0][0]+2)%24:02d}:00" if top3 else ""
+    return result, peak_label
+
+# ── Other helpers ─────────────────────────────────────
+def music_age(top_tracks):
+    years = []
+    for t in top_tracks:
+        yr = t.get('album',{}).get('release_date','0000')[:4]
+        if yr.isdigit(): years.append(int(yr))
+    if not years: return None
+    avg = round(sum(years)/len(years))
+    age = datetime.now().year - avg
+    decade_pct = {}
+    for y in years:
+        d = f"{(y//10)*10}s"
+        decade_pct[d] = decade_pct.get(d,0) + 1
+    dominant = max(decade_pct, key=decade_pct.get)
+    return {'avg_year':avg,'age':age,'dominant_decade':dominant}
+
+def discovery_score(top_artists, top_tracks):
+    all_pops = [a.get('popularity',0) for a in top_artists] + [t.get('popularity',0) for t in top_tracks]
+    if not all_pops: return {'score':50,'label':'未知','avg_pop':0}
+    avg_pop = sum(all_pops)/len(all_pops)
+    score = max(0, min(100, round((100-avg_pop)*1.2)))
+    if score >= 75: label = "🔮 地下音樂獵人"
+    elif score >= 50: label = "🌿 獨立品味玩家"
+    elif score >= 25: label = "🎬 主流邊緣遊走"
+    else: label = "📺 流行天王"
+    return {'score':score,'label':label,'avg_pop':round(avg_pop)}
+
+def signal_noise(top_tracks, top_artists):
+    ap_map = {a['id']:a.get('popularity',0) for a in top_artists}
+    signal, noise = [], []
+    for i, t in enumerate(top_tracks[:30]):
+        pop = t.get('popularity',0); rank = i+1
+        ap = max((ap_map.get(a.get('id',''),0) for a in t.get('artists',[])), default=0)
+        avg = (pop+ap)//2
+        if avg < 50 and rank <= 15: signal.append((t,avg,rank))
+        elif avg > 75 and pop > 70 and rank > 10: noise.append((t,avg,rank))
+    signal.sort(key=lambda x: x[2]); noise.sort(key=lambda x: x[1], reverse=True)
+    return signal[:5], noise[:5]
+
+def listening_streak(recent_items):
+    try:
+        days = set(item.get('played_at','')[:10] for item in recent_items if item.get('played_at'))
+        if len(days) < 2: return {'days':len(days),'streak':1,'status':'開始建立聆聽習慣'}
+        today = datetime.utcnow().date()
+        streak, check = 0, today
+        for d in reversed(sorted(days)):
+            dt = datetime.strptime(d,'%Y-%m-%d').date()
+            if dt == check or dt == check - timedelta(days=1): streak += 1; check = dt
+            else: break
+        if streak >= 7: s = '🎉 音樂狂人'
+        elif streak >= 4: s = '💪 穩定聆聽者'
+        elif streak >= 2: s = '📈 建立習慣中'
+        else: s = '🌱 剛開始探索'
+        return {'days':len(days),'streak':streak,'status':s}
+    except: return {'days':0,'streak':0,'status':''}
+
+def calendar_heatmap(recent_items):
+    heatmap = {}; now = datetime.utcnow()
+    for i in range(28):
+        day = (now - timedelta(days=i)).strftime('%Y-%m-%d')
+        heatmap[day] = 0
+    for item in recent_items:
+        day = item.get('played_at','')[:10]
+        if day in heatmap: heatmap[day] += 1
+    max_val = max(heatmap.values()) if heatmap.values() else 1
+    result = []
+    for day, count in sorted(heatmap.items()):
+        dto = datetime.strptime(day,'%Y-%m-%d')
+        result.append({'date':day,'day':dto.strftime('%a'),'daynum':dto.day,'count':count,'level':int(count/max_val*4) if max_val>0 else 0})
+    return result
+
+# ── Cache ─────────────────────────────────────────────
 _CACHE = {}; _TTL = 300
 def cache_get(key):
     if key in _CACHE:
@@ -61,23 +233,22 @@ def cache_get(key):
     return None, False
 def cache_set(key, value): _CACHE[key] = (value, time.time())
 
-# Tokens
+# ── Tokens ───────────────────────────────────────────
 def read_tokens():
-    client_id = os.environ.get('SPOTIFY_CLIENT_ID')
-    client_secret = os.environ.get('SPOTIFY_CLIENT_SECRET')
-    refresh_token = os.environ.get('SPOTIFY_REFRESH_TOKEN')
-    access_token = os.environ.get('SPOTIFY_ACCESS_TOKEN')
-    if not client_id:
+    cid = os.environ.get('SPOTIFY_CLIENT_ID')
+    cs  = os.environ.get('SPOTIFY_CLIENT_SECRET')
+    rt  = os.environ.get('SPOTIFY_REFRESH_TOKEN')
+    at  = os.environ.get('SPOTIFY_ACCESS_TOKEN')
+    if not cid:
         try:
-            with open('/opt/data/.env','rb') as f:
-                raw = f.read()
-            client_id = re.search(b'SPOTIFY_CLIENT_ID=([a-zA-Z0-9]+)', raw).group(1).decode()
-            client_secret = re.search(b'SPOTIFY_CLIENT_SECRET=([a-zA-Z0-9]+)', raw).group(1).decode()
-            refresh_token = re.search(b'SPOTIFY_REFRESH_TOKEN=([A-Za-z0-9_-]+)', raw).group(1).decode()
+            with open('/opt/data/.env','rb') as f: raw = f.read()
+            cid = re.search(b'SPOTIFY_CLIENT_ID=([a-zA-Z0-9]+)', raw).group(1).decode()
+            cs  = re.search(b'SPOTIFY_CLIENT_SECRET=([a-zA-Z0-9]+)', raw).group(1).decode()
+            rt  = re.search(b'SPOTIFY_REFRESH_TOKEN=([A-Za-z0-9_-]+)', raw).group(1).decode()
             access = re.search(b'SPOTIFY_ACCESS_TOKEN=([A-Za-z0-9_-]+)', raw)
-            access_token = access.group(1).decode() if access else None
+            at = access.group(1).decode() if access else None
         except: pass
-    return {'client_id':client_id,'client_secret':client_secret,'refresh_token':refresh_token,'access_token':access_token}
+    return {'client_id':cid,'client_secret':cs,'refresh_token':rt,'access_token':at}
 
 def refresh_access_token(cid, cs, rt):
     data = urllib.parse.urlencode({'grant_type':'refresh_token','refresh_token':rt,'client_id':cid,'client_secret':cs}).encode()
@@ -103,162 +274,7 @@ def api_get(url, cache_key=None):
     if cache_key: cache_set(cache_key, data)
     return data
 
-# ── Unique analyses ─────────────────────────────────────
-
-def music_age(top_tracks):
-    """Average year + 'music age' in years"""
-    years = []
-    for t in top_tracks:
-        yr = t.get('album',{}).get('release_date','0000')[:4]
-        if yr.isdigit(): years.append(int(yr))
-    if not years: return None
-    avg = round(sum(years)/len(years))
-    age = datetime.now().year - avg
-    decade_pct = {}
-    for y in years:
-        d = f"{(y//10)*10}s"
-        decade_pct[d] = decade_pct.get(d,0) + 1
-    dominant = max(decade_pct, key=decade_pct.get)
-    return {'avg_year': avg, 'age': age, 'dominant_decade': dominant, 'decade_pct': decade_pct}
-
-def timeless_artists(time_range):
-    """Find artists that appear across ALL 3 time ranges = truly timeless"""
-    ranges = ['short_term','medium_term','long_term']
-    artist_ranks = {}  # id -> {name, short, medium, long}
-    for r in ranges:
-        data = api_get(f'https://api.spotify.com/v1/me/top/artists?limit=50&time_range={r}', cache_key=f'top_artists_{r}')
-        for i, a in enumerate(data['items']):
-            aid = a['id']
-            if aid not in artist_ranks:
-                artist_ranks[aid] = {'name':a['name'],'images':a.get('images',[]),'genres':a.get('genres',[])}
-            artist_ranks[aid][r] = i + 1
-    # Keep only artists present in all 3
-    timeless = []
-    for aid, info in artist_ranks.items():
-        if all(r in info for r in ranges):
-            avg_rank = sum(info[r] for r in ranges) / 3
-            timeless.append({'id':aid,'name':info['name'],'images':info['images'],'genres':info['genres'],'avg_rank':round(avg_rank,1)})
-    timeless.sort(key=lambda x: x['avg_rank'])
-    return timeless[:8]
-
-def energy_arc(recent_items):
-    """Listening energy by time of day"""
-    hour_buckets = [
-        ('🌅 早晨 6-9',    range(6,9)),
-        ('💼 上午 9-12',   range(9,12)),
-        ('☀️ 中午 12-14', range(12,14)),
-        ('📖 下午 14-18', range(14,18)),
-        ('🌆 傍晚 18-21', range(18,21)),
-        ('🌙 夜晚 21-24', range(21,24)),
-        ('🌃 深夜 0-6',   range(0,6)),
-    ]
-    counts = {label:0 for label,_ in hour_buckets}
-    for item in recent_items:
-        try:
-            h = int(item.get('played_at','')[11:13])
-        except: continue
-        for label, r in hour_buckets:
-            if h in r: counts[label] += 1; break
-    total = sum(counts.values()) or 1
-    result = []
-    for label, _ in hour_buckets:
-        c = counts[label]
-        if c > 0:
-            result.append({'label':label,'count':c,'pct':round(c/total*100)})
-    # Find peak
-    if result:
-        peak = max(result, key=lambda x: x['count'])
-        for r in result:
-            r['is_peak'] = (r['label'] == peak['label'])
-    return result
-
-def discovery_score(top_artists, top_tracks):
-    """How underground is your taste? 0=mainstream, 100=deep cut"""
-    artist_pops = [a.get('popularity',0) for a in top_artists]
-    track_pops = [t.get('popularity',0) for t in top_tracks]
-    all_pops = artist_pops + track_pops
-    if not all_pops: return 50
-    avg_pop = sum(all_pops) / len(all_pops)
-    # 0 pop = underground, 100 = mainstream → invert for discovery
-    score = round((100 - avg_pop) * 1.2)  # scale to roughly 0-100
-    score = max(0, min(100, score))
-    # Labels
-    if score >= 75: label = "🔮 地下音樂獵人"
-    elif score >= 50: label = "🌿 獨立品味玩家"
-    elif score >= 25: label = "🎬 主流邊緣遊走"
-    else: label = "📺 流行趨勢達人"
-    return {'score': score, 'label': label, 'avg_pop': round(avg_pop)}
-
-def guiltyPleasures(top_tracks):
-    """High dance + low energy = guilty pleasure territory"""
-    gp = []
-    for t in top_tracks[:30]:
-        pop = t.get('popularity', 0)
-        # Fake danceability from genres
-        dance = 0.5
-        genres = t.get('album',{}).get('artists',[{}])[0].get('genres',[])
-        for g in genres:
-            gl = g.lower()
-            if 'pop' in gl: dance = 0.75
-            if 'k-pop' in gl or 'j-pop' in gl: dance = 0.82
-            if 'dance' in gl: dance = 0.85
-        # High popularity + high danceability + not super high energy
-        if pop > 60 and dance > 0.65:
-            gp.append({'track':t,'dance':dance,'pop':pop})
-    gp.sort(key=lambda x: x['dance'], reverse=True)
-    return gp[:5]
-
-def signal_noise(top_tracks, top_artists):
-    artist_pop_map = {a['id']:a.get('popularity',0) for a in top_artists}
-    signal, noise = [], []
-    for i, t in enumerate(top_tracks[:30]):
-        pop = t.get('popularity',0)
-        rank = i + 1
-        ap = max((artist_pop_map.get(a.get('id',''),0) for a in t.get('artists',[])), default=0)
-        avg = (pop + ap) // 2
-        if avg < 50 and rank <= 15: signal.append((t, avg, rank))
-        elif avg > 75 and pop > 70 and rank > 10: noise.append((t, avg, rank))
-    signal.sort(key=lambda x: x[2])
-    noise.sort(key=lambda x: x[1], reverse=True)
-    return signal[:5], noise[:5]
-
-def listening_streak(recent_items):
-    try:
-        days = set(item.get('played_at','')[:10] for item in recent_items if item.get('played_at'))
-        day_list = sorted(days)
-        if len(day_list) < 2: return {'days':len(days),'streak':1,'status':'開始建立聆聽習慣'}
-        today = datetime.utcnow().date()
-        streak, check = 0, today
-        for d in reversed(day_list):
-            dt = datetime.strptime(d,'%Y-%m-%d').date()
-            if dt == check or dt == check - timedelta(days=1):
-                streak += 1; check = dt
-            else: break
-        if streak >= 7: s = '🎉 音樂狂人！連續聆聽習慣超強'
-        elif streak >= 4: s = '💪 穩定聆聽者'
-        elif streak >= 2: s = '📈 正在建立習慣'
-        else: s = '🌱 剛開始探索'
-        return {'days':len(days),'streak':streak,'status':s}
-    except: return {'days':0,'streak':0,'status':''}
-
-def calendar_heatmap(recent_items):
-    heatmap = {}
-    now = datetime.utcnow()
-    for i in range(28):
-        day = (now - timedelta(days=i)).strftime('%Y-%m-%d')
-        heatmap[day] = 0
-    for item in recent_items:
-        day = item.get('played_at','')[:10]
-        if day in heatmap: heatmap[day] += 1
-    max_val = max(heatmap.values()) if heatmap.values() else 1
-    result = []
-    for day, count in sorted(heatmap.items()):
-        dto = datetime.strptime(day,'%Y-%m-%d')
-        result.append({'date':day,'day':dto.strftime('%a'),'daynum':dto.day,'count':count,'level':int(count/max_val*4) if max_val>0 else 0})
-    return result
-
-# ── Routes ───────────────────────────────────────────────────────
-
+# ── Routes ────────────────────────────────────────────
 app.jinja_env.globals['now'] = lambda: datetime.now().strftime('%Y-%m-%d')
 
 @app.route('/')
@@ -280,18 +296,26 @@ def index():
         sorted_genres = sorted(genre_count.items(), key=lambda x: x[1], reverse=True)
         top_genres = [(g,c) for g,c in sorted_genres if c >= 2]
 
-        # Features
         features = estimate_features(top_genres)
-
-        # Unique analyses
-        music_age_data = music_age(top_tracks)
-        timeless = timeless_artists(time_range)
-        energy_arc_data = energy_arc(recent_items)
-        discovery = discovery_score(top_artists, top_tracks)
-        gp = guiltyPleasures(top_tracks)
+        dna = taste_dna(top_artists, top_tracks, top_genres)
+        decade_data = decade_breakdown(top_tracks)
+        artist_conns = artist_connections(top_artists, top_tracks)
+        hours_data, peak_label = peak_hours(recent_items)
         signal_t, noise_t = signal_noise(top_tracks, top_artists)
         streak = listening_streak(recent_items)
         heatmap = calendar_heatmap(recent_items)
+        music_age_data = music_age(top_tracks)
+        discovery = discovery_score(top_artists, top_tracks)
+
+        # Top collaborators
+        artist_track_count = {}
+        for t in top_tracks:
+            for a in t.get('artists',[]):
+                aid = a['id']
+                if aid not in artist_track_count:
+                    artist_track_count[aid] = {'name':a['name'],'images':a.get('images',[]),'count':0}
+                artist_track_count[aid]['count'] += 1
+        top_collab = sorted(artist_track_count.values(), key=lambda x: x['count'], reverse=True)[:8]
 
         # Stats
         total_tracks = len(top_tracks)
@@ -299,7 +323,7 @@ def index():
         avg_pop = round(sum(t.get('popularity',0) for t in top_tracks)/max(total_tracks,1))
         total_duration_min = round(sum(t.get('duration_ms',0) for t in top_tracks)/60000)
 
-        # Taste profile
+        # Profile
         e,d,v = features['energy'], features['danceability'], features['valence']
         if e > 0.75 and d > 0.7: taste_profile = "⚡ 派對動物"
         elif e > 0.65 and v > 0.6: taste_profile = "🌴 陽光系"
@@ -310,46 +334,22 @@ def index():
 
         # Share text
         top_artist_name = top_artists[0]['name'] if top_artists else '?'
-        share = f"🎵 我的 Spotify 品味分析\nProfile: {taste_profile}\nTop Artist: {top_artist_name}\nMusic Age: {music_age_data['age']}歲 | {discovery['label']}\nAvg BPM: {features['tempo']} | Dance: {int(features['danceability']*100)}% | Energy: {int(features['energy']*100)}%\n{streak['status']}"
+        top_dna_dim = dna[0]['dim'] if dna else '?'
+        share = f"🎵 我的 Spotify 品味分析\nProfile: {taste_profile}\nTop Artist: {top_artist_name}\nMusic Age: {music_age_data['age']}歲\nTaste DNA: {top_dna_dim}導向\nDiscovery: {discovery['label']}\nPeak: {peak_label}\n{streak['status']}"
 
         return render_template('index.html',
             top_artists=top_artists, top_tracks=top_tracks, recent=recent_items[:20],
             top_genres=top_genres, features=features, time_range=time_range,
-            discovery_genres=top_genres[:12], signal_tracks=[s[0] for s in signal_t],
+            discovery_genres=top_genres[:15], signal_tracks=[s[0] for s in signal_t],
             noise_tracks=[n[0] for n in noise_t], streak=streak, heatmap=heatmap,
-            music_age=music_age_data, timeless=timeless, energy_arc=energy_arc_data,
-            discovery=discovery, guilty_pleasures=gp, taste_profile=taste_profile, share=share,
+            music_age=music_age_data, discovery=discovery, taste_profile=taste_profile,
+            share=share, dna=dna, decade_data=decade_data,
+            artist_conns=artist_conns[:12], top_collab=top_collab,
+            peak_label=peak_label, hours_data=hours_data,
             stats={'explicit':explicit_count,'popularity':avg_pop,'duration':total_duration_min,'genres':len(top_genres)},
         )
     except Exception as e:
         import traceback; return f"<pre>Error: {e}\n\n{traceback.format_exc()}</pre>", 500
-
-@app.route('/api/compare-ranges')
-def api_compare_ranges():
-    try:
-        ranges = {'short_term':'4週','medium_term':'6個月','long_term':'All Time'}
-        all_genres = {}
-        all_artists = {}
-        for r in ranges:
-            data = api_get(f'https://api.spotify.com/v1/me/top/artists?limit=50&time_range={r}', cache_key=f'top_artists_{r}')
-            for i, a in enumerate(data['items']):
-                aid = a['id']
-                if aid not in all_artists: all_artists[aid] = {'name':a['name'],'images':a.get('images',[])}
-                all_artists[aid][f'{r}_rank'] = i+1
-                for g in a.get('genres',[]):
-                    if g not in all_genres: all_genres[g] = {'short':0,'medium':0,'long':0}
-                    all_genres[g][r] = all_genres[g].get(r,0)+1
-        rising, declining = [], []
-        for g, c in all_genres.items():
-            s,m,l = c.get('short',0),c.get('medium',0),c.get('long',0)
-            if s+m+l < 3: continue
-            if s > m > l: rising.append({'genre':g,'short':s,'medium':m,'long':l})
-            elif l > m > s: declining.append({'genre':g,'short':s,'medium':m,'long':l})
-        rising.sort(key=lambda x: x['short'], reverse=True)
-        declining.sort(key=lambda x: x['long'], reverse=True)
-        return jsonify({'rising':rising[:5],'declining':declining[:5]})
-    except Exception as e:
-        return jsonify({'error':str(e)}), 500
 
 @app.route('/api/refresh-token')
 def api_refresh():
