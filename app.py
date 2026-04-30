@@ -120,9 +120,9 @@ def index():
                 else:              hour_buckets['Night (0-6)'] += 1
         sorted_hours = sorted(hour_buckets.items(), key=lambda x: x[1], reverse=True)
 
-        # ── Discovery Radar (Genre Explorer) ───────────────────
-        # Based on user's top genres, show genre exploration
-        discovery_genres = [(g, c) for g, c in sorted_genres[:8]]
+        # ── Genre Explorer ────────────────────────────────────────
+        # Use top_genres which filters for count >= 2
+        discovery_genres = top_genres[:12]
 
         # ── Listening stats ─────────────────────────────────
         total_tracks = len(top_tracks['items'])
