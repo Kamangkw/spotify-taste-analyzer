@@ -483,8 +483,8 @@ function updatePlayBtn() {
 // ── Play Track ────────────────────────────────────────
 // ── Open Spotify on Windows (spotify: protocol) ──────────
 function openSpotifyApp(trackId) {
-  // Try to open Windows Spotify app via spotify: URI
-  window.location.href = `spotify:track:${trackId}`;
+  // spotify:play:track:{id} → open Spotify AND auto-play the track
+  window.location.href = `spotify:play:track:${trackId}`;
 }
 
 // ── Play Track ────────────────────────────────────────
