@@ -184,19 +184,25 @@ def api_recent():
 def api_discovery():
     """Get personalized recommendations based on top artists."""
     try:
-        top_artists = api_get('https://api.spotify.com/v1/me/top/artists?limit=5')
-        top_genres  = api_get('https://api.spotify.com/v1/me/top/artists?limit=20')
+        # Get top artists and their genres
+        top_artists = api_get('https://api.spotify.com/v1/me/top/artists?limit=10')
         genre_count = {}
-        for a in top_genres['items']:
+        for a in top_artists['items']:
             for g in a.get('genres', []):
                 genre_count[g] = genre_count.get(g, 0) + 1
         top_g = sorted(genre_count.items(), key=lambda x: x[1], reverse=True)
-        genre_seeds = ','.join([g for g, c in top_g[:2]])
+        genre_seeds = ','.join([urllib.parse.quote(g) for g, c in top_g[:3]])
         artist_ids = [a['id'] for a in top_artists['items'][:3]]
-        artist_seeds = ','.join(artist_ids[:2])
+        artist_seeds = ','.join(artist_ids[:1])  # Use only 1 artist seed
+
+        # Try with artist seed + genre seed
         url = f'https://api.spotify.com/v1/recommendations?seed_artists={artist_seeds}&seed_genres={genre_seeds}&limit=10&market=HK'
         recs = api_get(url)
-        return jsonify(recs.get('tracks', []))
+        tracks = recs.get('tracks', [])
+        return jsonify(tracks)
+    except urllib.error.HTTPError as e:
+        body = e.read().decode()
+        return jsonify({'error': f'HTTP {e.code}', 'detail': body[:200]}), 500
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
