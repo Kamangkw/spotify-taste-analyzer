@@ -87,66 +87,59 @@ app.jinja_env.globals['now'] = lambda: datetime.now().strftime('%Y-%m-%d')
 @app.route('/')
 def index():
     """Main taste overview dashboard."""
-    token = get_access_token()
-    
-    # Parallel-ish data fetch
     try:
+        token = get_access_token()
+
+        # Fetch all data
         top_artists = api_get('https://api.spotify.com/v1/me/top/artists?limit=50&time_range=medium_term')
         top_tracks  = api_get('https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=medium_term')
         recent      = api_get('https://api.spotify.com/v1/me/player/recently-played?limit=50')
+
+        # ── Genre distribution ──────────────────────────────────────
+        genre_count = {}
+        for artist in top_artists['items']:
+            for g in artist.get('genres', []):
+                genre_count[g] = genre_count.get(g, 0) + 1
+        sorted_genres = sorted(genre_count.items(), key=lambda x: x[1], reverse=True)
+        top_genres = [(g, c) for g, c in sorted_genres if c >= 2]
+
+        # ── Decade distribution (from top tracks) ─────────────────
+        decade_count = {'2020s': 0, '2010s': 0, '2000s': 0, '1990s': 0, '1980s': 0, 'Earlier': 0}
+        for track in top_tracks['items']:
+            year = track.get('album', {}).get('release_date', '0000')[:4]
+            d = int(year) if year.isdigit() else 0
+            if d >= 2020: decade_count['2020s'] += 1
+            elif d >= 2010: decade_count['2010s'] += 1
+            elif d >= 2000: decade_count['2000s'] += 1
+            elif d >= 1990: decade_count['1990s'] += 1
+            elif d >= 1980: decade_count['1980s'] += 1
+            else: decade_count['Earlier'] += 1
+        sorted_decades = sorted(decade_count.items(), key=lambda x: x[1], reverse=True)
+        top_decades = [(d, c) for d, c in sorted_decades if c > 0]
+
+        # ── Audio feature averages ───────────────────────────────
+        track_ids = [t['id'] for t in top_tracks['items'][:20] if t.get('id')]
+        features = {'danceability': 0, 'energy': 0, 'valence': 0, 'tempo': 0}
+        if track_ids:
+            ids_param = ','.join(track_ids)
+            feat_data = api_get(f'https://api.spotify.com/v1/audio-features?ids={ids_param}')
+            feats = [f for f in feat_data.get('audio_features', []) if f]
+            if feats:
+                for k in features:
+                    features[k] = round(sum(f.get(k, 0) or 0 for f in feats) / len(feats), 3)
+
+        return render_template(
+            'index.html',
+            top_artists=top_artists['items'],
+            top_tracks=top_tracks['items'],
+            recent=recent['items'][:20],
+            top_genres=top_genres,
+            top_decades=top_decades,
+            features=features,
+        )
     except Exception as e:
         import traceback
-        return f"<pre>API Error: {e}\n\n{traceback.format_exc()}</pre>", 500
-
-    # ── Genre distribution ──────────────────────────────────────
-    genre_count = {}
-    for artist in top_artists['items']:
-        for g in artist.get('genres', []):
-            genre_count[g] = genre_count.get(g, 0) + 1
-    sorted_genres = sorted(genre_count.items(), key=lambda x: x[1], reverse=True)
-    top_genres = [(g, c) for g, c in sorted_genres if c >= 2]
-
-    # ── Decade distribution (from top tracks) ─────────────────
-    decade_count = {'2020s': 0, '2010s': 0, '2000s': 0, '1990s': 0, '1980s': 0, 'Earlier': 0}
-    for track in top_tracks['items']:
-        year = track.get('album', {}).get('release_date', '0000')[:4]
-        d = int(year) if year.isdigit() else 0
-        if d >= 2020: decade_count['2020s'] += 1
-        elif d >= 2010: decade_count['2010s'] += 1
-        elif d >= 2000: decade_count['2000s'] += 1
-        elif d >= 1990: decade_count['1990s'] += 1
-        elif d >= 1980: decade_count['1980s'] += 1
-        else: decade_count['Earlier'] += 1
-    sorted_decades = sorted(decade_count.items(), key=lambda x: x[1], reverse=True)
-    top_decades = [(d, c) for d, c in sorted_decades if c > 0]
-
-    # ── Audio feature averages (via audio-features endpoint) ────
-    track_ids = [t['id'] for t in top_tracks['items'][:20] if t['id']]
-    features = {'danceability': 0, 'energy': 0, 'valence': 0, 'tempo': 0}
-    if track_ids:
-        ids_param = ','.join(track_ids)
-        try:
-            feat_data = api_get(f'https://api.spotify.com/v1/audio-features?ids={ids_param}')
-            for f in feat_data.get('audio_features', []):
-                if f:
-                    for k in features:
-                        features[k] += f.get(k, 0) or 0
-            count = len([f for f in feat_data.get('audio_features', []) if f])
-            if count > 0:
-                for k in features:
-                    features[k] = round(features[k] / count, 3)
-        except Exception:
-            pass
-
-    return render_template(
-        'index.html',
-        top_artists=top_artists['items'],
-        top_tracks=top_tracks['items'],
-        recent=recent['items'][:20],
-        top_genres=top_genres,
-        top_decades=top_decades,
-        features=features,
-    )
+        return f"<pre>Error: {e}\n\n{traceback.format_exc()}</pre>", 500
 
 @app.route('/api/top-artists')
 def api_top_artists():
